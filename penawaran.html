@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasang Penawaran Material Sisa - ReBahan</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- NAVBAR COMPONENT -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-sm transition-all duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3">
+                    <a href="index.html" class="flex items-center space-x-3 group">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-200">
+                            <svg class="w-6 h-6 animate-[spin_10s_linear_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl font-black tracking-tight text-slate-800">
+                                    Re<span class="text-emerald-600">Bahan</span>
+                                </span>
+                                <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    SIRKULAR UMKM
+                                </span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 hidden sm:block">Pemanfaatan Material Sisa Jakarta</p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <a href="index.html" class="flex items-center px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        Dashboard & Impact
+                    </a>
+                    <a href="katalog.html" class="flex items-center px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        Katalog Material
+                    </a>
+                    <a href="penawaran.html" class="flex items-center px-3.5 py-2 rounded-xl text-sm font-semibold bg-emerald-50 text-emerald-700 shadow-xs">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Pasang Penawaran
+                    </a>
+                    <a href="matching.html" class="flex items-center px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Smart Matching
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-3">
+                    <a href="penawaran.html" class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 shadow-sm transition-all">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Pasang Bahan
+                    </a>
+                </div>
+
+                <!-- Mobile Hamburger Button -->
+                <div class="flex items-center md:hidden">
+                    <button type="button" id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-emerald-600 hover:bg-slate-100 focus:outline-none">
+                        <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                        <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white/95 px-4 pt-3 pb-5 space-y-2">
+            <a href="index.html" class="flex items-center px-3 py-2.5 rounded-xl text-base font-medium text-slate-600">Dashboard & Impact</a>
+            <a href="katalog.html" class="flex items-center px-3 py-2.5 rounded-xl text-base font-medium text-slate-600">Katalog Material</a>
+            <a href="penawaran.html" class="flex items-center px-3 py-2.5 rounded-xl text-base font-semibold bg-emerald-50 text-emerald-700">Pasang Penawaran</a>
+            <a href="matching.html" class="flex items-center px-3 py-2.5 rounded-xl text-base font-medium text-slate-600">Smart Matching</a>
+        </div>
+    </nav>
+
+    <!-- MAIN FORM -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+        
+        <div class="mb-8 max-w-4xl mx-auto">
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 mb-2">
+                <span>🌱 Formulir Pasok Material Sirkular</span>
+            </div>
+            <h1 class="text-3xl font-black text-slate-900 tracking-tight">
+                Pasang Penawaran Material Sisa Produksi
+            </h1>
+            <p class="text-sm text-slate-600 mt-1">
+                Ubah limbah dan potongan bahan sisa usaha Anda menjadi nilai tambah ekonomi dan bantu sesama UMKM Jakarta.
+            </p>
+        </div>
+
+        <div id="form-error-alert" class="hidden max-w-4xl mx-auto mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-800 text-sm shadow-xs"></div>
+
+        <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            
+            <!-- Left Form (8 Cols) -->
+            <div class="lg:col-span-8 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+                
+                <form id="offerForm" onsubmit="handleOfferSubmit(event)" class="space-y-6">
+                    
+                    <!-- BAGIAN 1: IDENTITAS UMKM -->
+                    <div class="space-y-4">
+                        <div class="border-b border-slate-100 pb-2">
+                            <h2 class="text-base font-bold text-slate-900 flex items-center">
+                                <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-800 text-xs flex items-center justify-center mr-2 font-black">1</span>
+                                Identitas Usaha & Kontak Anda
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-0.5">Informasi lokasi dan narahubung untuk pengambilan material.</p>
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-1">
+                                <label for="nama_usaha" class="block text-xs font-bold text-slate-700">Nama Usaha / UMKM <span class="text-rose-500">*</span></label>
+                                <span class="text-[11px] text-emerald-600 cursor-pointer hover:underline" onclick="toggleQuickSelect()">
+                                    Pilih dari UMKM Terdaftar
+                                </span>
+                            </div>
+                            
+                            <select id="quick_select_user" class="hidden w-full mb-2 px-3 py-2 text-xs rounded-xl border border-emerald-300 bg-emerald-50 text-slate-800 focus:outline-none" onchange="applyUserQuickSelect(this)">
+                                <!-- Populated by JS -->
+                            </select>
+
+                            <input type="text" id="nama_usaha" required placeholder="Contoh: Penjahit Modesta Busana" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label for="sektor" class="block text-xs font-bold text-slate-700 mb-1">Sektor Usaha</label>
+                                <select id="sektor" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                    <option value="Tekstil">Tekstil & Konveksi</option>
+                                    <option value="Percetakan">Percetakan & Grafika</option>
+                                    <option value="Kerajinan">Kerajinan & Seni</option>
+                                    <option value="Mebel/Kayu">Mebel & Palet</option>
+                                    <option value="Manufaktur">Manufaktur & Logistik</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="wilayah" class="block text-xs font-bold text-slate-700 mb-1">Wilayah Jakarta <span class="text-rose-500">*</span></label>
+                                <select id="wilayah" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                    <option value="Jakarta Selatan">Jakarta Selatan</option>
+                                    <option value="Jakarta Pusat">Jakarta Pusat</option>
+                                    <option value="Jakarta Barat">Jakarta Barat</option>
+                                    <option value="Jakarta Timur">Jakarta Timur</option>
+                                    <option value="Jakarta Utara">Jakarta Utara</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="kontak" class="block text-xs font-bold text-slate-700 mb-1">WhatsApp / HP <span class="text-rose-500">*</span></label>
+                                <input type="text" id="kontak" required placeholder="08xxxxxxxxxx" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BAGIAN 2: RINCIAN MATERIAL SISA -->
+                    <div class="space-y-4 pt-4 border-t border-slate-100">
+                        <div class="border-b border-slate-100 pb-2">
+                            <h2 class="text-base font-bold text-slate-900 flex items-center">
+                                <span class="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-800 text-xs flex items-center justify-center mr-2 font-black">2</span>
+                                Rincian Material Sisa Produksi
+                            </h2>
+                            <p class="text-xs text-slate-500 mt-0.5">Sebutkan kategori, volume, dan kondisi fisik bahan secara detail.</p>
+                        </div>
+
+                        <div>
+                            <label for="nama_bahan" class="block text-xs font-bold text-slate-700 mb-1">Nama Bahan / Material Sisa <span class="text-rose-500">*</span></label>
+                            <input type="text" id="nama_bahan" required placeholder="Contoh: Sisa Kain Katun Rayon Corak Bunga" class="w-full px-3.5 py-2.5 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label for="kategori" class="block text-xs font-bold text-slate-700 mb-1">Kategori Material <span class="text-rose-500">*</span></label>
+                                <select id="kategori" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                    <option value="Kain/Tekstil">🧵 Kain/Tekstil</option>
+                                    <option value="Kertas/Karton">📦 Kertas/Karton</option>
+                                    <option value="Plastik">♻️ Plastik</option>
+                                    <option value="Kayu/Bambu">🪵 Kayu/Bambu</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label for="jumlah" class="block text-xs font-bold text-slate-700 mb-1">Kuantitas / Jumlah <span class="text-rose-500">*</span></label>
+                                <input type="number" step="0.1" id="jumlah" required placeholder="Misal: 25.5" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+                            </div>
+
+                            <div>
+                                <label for="satuan" class="block text-xs font-bold text-slate-700 mb-1">Satuan Ukuran <span class="text-rose-500">*</span></label>
+                                <select id="satuan" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                    <option value="kg">Kilogram (kg)</option>
+                                    <option value="meter">Meter (panjang)</option>
+                                    <option value="pcs">Pcs / Buah / Lembar</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="kondisi" class="block text-xs font-bold text-slate-700 mb-1">Kondisi Material <span class="text-rose-500">*</span></label>
+                            <input type="text" id="kondisi" required placeholder="Contoh: Bersih, kering, sisa potongan rapi dari rol baru" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+                        </div>
+
+                        <div>
+                            <label for="deskripsi" class="block text-xs font-bold text-slate-700 mb-1">Catatan Pemanfaatan / Deskripsi Tambahan</label>
+                            <textarea id="deskripsi" rows="3" placeholder="Contoh: Cocok untuk kerajinan pouch, masker kain, perca patchwork, atau kerajinan tangan lainnya..." class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 flex items-center justify-end space-x-3">
+                        <a href="katalog.html" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition">
+                            Batal
+                        </a>
+                        <button type="submit" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold text-sm shadow-md shadow-emerald-600/20 transition flex items-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Terbitkan ke Katalog
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+
+            <!-- Right Sidebar: Panduan Sirkular ReBahan (4 Cols) -->
+            <div class="lg:col-span-4 space-y-6">
+                <div class="bg-gradient-to-br from-emerald-500 to-teal-600 text-white rounded-3xl p-6 shadow-md shadow-emerald-500/20">
+                    <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-md flex items-center justify-center text-xl mb-4">
+                        💡
+                    </div>
+                    <h3 class="text-base font-bold mb-2">Mengapa Menawarkan Bahan Sisa?</h3>
+                    <ul class="text-xs space-y-2 opacity-95">
+                        <li class="flex items-start">
+                            <span class="mr-1.5 font-bold">✓</span>
+                            <span><strong>Hemat Biaya Buang:</strong> Mengurangi beban retribusi sampah industri Anda.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-1.5 font-bold">✓</span>
+                            <span><strong>Dukung UMKM Lokal:</strong> Menjadi pahlawan rantai pasok bagi pengrajin kecil Jakarta.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="mr-1.5 font-bold">✓</span>
+                            <span><strong>Jejak Hijau:</strong> Menjadi bagian resmi pergerakan ekonomi sirkular ibu kota.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-xs">
+                    <h3 class="text-sm font-bold text-slate-900 mb-3 flex items-center">
+                        <span class="text-emerald-600 mr-2">📋</span>
+                        Kriteria Material yang Diterima
+                    </h3>
+                    <ul class="text-xs text-slate-600 space-y-2">
+                        <li class="flex items-start">
+                            <span class="text-emerald-500 mr-1.5">●</span>
+                            <span><strong>Bersih & Kering:</strong> Bebas dari kontaminasi cairan beracun, oli, atau sampah basah.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-emerald-500 mr-1.5">●</span>
+                            <span><strong>Terpilah:</strong> Tidak bercampur antara kain, plastik, atau material keras.</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-emerald-500 mr-1.5">●</span>
+                            <span><strong>Jujur pada Kondisi:</strong> Cantumkan ukuran atau cacat potongan agar pengambil dapat mengantisipasi.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+        ReBahan &copy; 2026 - Platform Kolaborasi Ekonomi Sirkular UMKM Jakarta.
+    </footer>
+
+    <!-- SCRIPT DATA & SUBMIT -->
+    <script src="data.js"></script>
+    <script>
+        // Populate quick select user
+        function populateQuickSelect() {
+            const users = getUsers();
+            const selectEl = document.getElementById('quick_select_user');
+            selectEl.innerHTML = `
+                <option value="">-- Pilih Profil UMKM Cepat --</option>
+                ${users.map(u => `<option value="${encodeURIComponent(JSON.stringify(u))}">${u.nama_usaha} (${u.wilayah})</option>`).join('')}
+            `;
+        }
+
+        function toggleQuickSelect() {
+            document.getElementById('quick_select_user').classList.toggle('hidden');
+        }
+
+        function applyUserQuickSelect(el) {
+            if (!el.value) return;
+            const data = JSON.parse(decodeURIComponent(el.value));
+            document.getElementById('nama_usaha').value = data.nama_usaha || '';
+            document.getElementById('kontak').value = data.kontak || '';
+            if (data.sektor) document.getElementById('sektor').value = data.sektor;
+            if (data.wilayah) document.getElementById('wilayah').value = data.wilayah;
+        }
+
+        function handleOfferSubmit(e) {
+            e.preventDefault();
+
+            const nama_usaha = document.getElementById('nama_usaha').value.trim();
+            const sektor = document.getElementById('sektor').value;
+            const wilayah = document.getElementById('wilayah').value;
+            const kontak = document.getElementById('kontak').value.trim();
+
+            const nama_bahan = document.getElementById('nama_bahan').value.trim();
+            const kategori = document.getElementById('kategori').value;
+            const jumlah = document.getElementById('jumlah').value.trim();
+            const satuan = document.getElementById('satuan').value;
+            const kondisi = document.getElementById('kondisi').value.trim();
+            const deskripsi = document.getElementById('deskripsi').value.trim();
+
+            if (!nama_usaha || !kontak || !nama_bahan || !jumlah || !kondisi) {
+                const alertEl = document.getElementById('form-error-alert');
+                alertEl.innerHTML = 'Mohon lengkapi semua kolom wajib yang bertanda bintang (*).';
+                alertEl.classList.remove('hidden');
+                return;
+            }
+
+            // Simpan ke LocalStorage via data.js
+            const newMat = addMaterial({
+                nama_usaha,
+                sektor,
+                wilayah,
+                kontak,
+                nama_bahan,
+                kategori,
+                jumlah,
+                satuan,
+                kondisi,
+                deskripsi
+            });
+
+            // Redirect ke katalog dengan parameter notifikasi
+            window.location.href = `katalog.html?added=1&id=${newMat.id}#mat-${newMat.id}`;
+        }
+
+        populateQuickSelect();
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+</body>
+</html>
+

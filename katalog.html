@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog Material Sisa - ReBahan</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- NAVBAR COMPONENT -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-sm transition-all duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3">
+                    <a href="index.html" class="flex items-center space-x-3 group">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-200">
+                            <svg class="w-6 h-6 animate-[spin_10s_linear_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl font-black tracking-tight text-slate-800">
+                                    Re<span class="text-emerald-600">Bahan</span>
+                                </span>
+                                <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    SIRKULAR UMKM
+                                </span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 hidden sm:block">Pemanfaatan Material Sisa Jakarta</p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <a href="index.html" class="flex items-center px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        Dashboard & Impact
+                    </a>
+                    <a href="katalog.html" class="flex items-center px-3.5 py-2 rounded-xl text-sm font-semibold bg-emerald-50 text-emerald-700 shadow-xs">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        Katalog Material
+                    </a>
+                    <a href="penawaran.html" class="flex items-center px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Pasang Penawaran
+                    </a>
+                    <a href="matching.html" class="flex items-center px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Smart Matching
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-3">
+                    <a href="penawaran.html" class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 shadow-sm transition-all">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Pasang Bahan
+                    </a>
+                </div>
+
+                <!-- Mobile Hamburger Button -->
+                <div class="flex items-center md:hidden">
+                    <button type="button" id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-emerald-600 hover:bg-slate-100 focus:outline-none">
+                        <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                        <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white/95 px-4 pt-3 pb-5 space-y-2">
+            <a href="index.html" class="flex items-center px-3 py-2.5 rounded-xl text-base font-medium text-slate-600 hover:text-emerald-600">Dashboard & Impact</a>
+            <a href="katalog.html" class="flex items-center px-3 py-2.5 rounded-xl text-base font-semibold bg-emerald-50 text-emerald-700">Katalog Material</a>
+            <a href="penawaran.html" class="flex items-center px-3 py-2.5 rounded-xl text-base font-medium text-slate-600 hover:text-emerald-600">Pasang Penawaran</a>
+            <a href="matching.html" class="flex items-center px-3 py-2.5 rounded-xl text-base font-medium text-slate-600 hover:text-emerald-600">Smart Matching</a>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
+        
+        <!-- Header Banner -->
+        <div class="mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                            Bursa Sirkular
+                        </span>
+                        <span class="text-xs text-slate-500">• Terbuka untuk seluruh pelaku usaha di Jakarta</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
+                        Katalog Material Sisa Produksi
+                    </h1>
+                    <p class="text-slate-600 text-sm mt-1">
+                        Temukan sisa bahan baku kain, kertas, kayu, dan plastik dari UMKM mitra untuk kebutuhan usaha Anda.
+                    </p>
+                </div>
+                <a href="penawaran.html" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-emerald-600 text-white font-semibold text-sm hover:bg-emerald-700 shadow-sm transition">
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Tawarkan Material Sisa Anda
+                </a>
+            </div>
+        </div>
+
+        <!-- Success/Error Alert Container -->
+        <div id="alert-container"></div>
+
+        <!-- FILTER & SEARCH PANEL -->
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4">
+                <!-- Search Keyword -->
+                <div class="lg:col-span-5">
+                    <label for="search-input" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Cari Bahan / UMKM</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <input type="text" id="search-input" oninput="applyFilters()" 
+                               placeholder="Contoh: Kain katun, Art paper, Palet kayu..." 
+                               class="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
+                    </div>
+                </div>
+
+                <!-- Filter Kategori -->
+                <div class="lg:col-span-3">
+                    <label for="filter-kategori" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kategori Material</label>
+                    <select id="filter-kategori" onchange="applyFilters()" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white">
+                        <option value="">Semua Kategori</option>
+                        <option value="Kain/Tekstil">🧵 Kain/Tekstil</option>
+                        <option value="Kertas/Karton">📦 Kertas/Karton</option>
+                        <option value="Plastik">♻️ Plastik</option>
+                        <option value="Kayu/Bambu">🪵 Kayu/Bambu</option>
+                    </select>
+                </div>
+
+                <!-- Filter Wilayah Jakarta -->
+                <div class="lg:col-span-3">
+                    <label for="filter-wilayah" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Wilayah Jakarta</label>
+                    <select id="filter-wilayah" onchange="applyFilters()" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white">
+                        <option value="">Semua Wilayah</option>
+                        <option value="Jakarta Selatan">Jakarta Selatan</option>
+                        <option value="Jakarta Pusat">Jakarta Pusat</option>
+                        <option value="Jakarta Barat">Jakarta Barat</option>
+                        <option value="Jakarta Timur">Jakarta Timur</option>
+                        <option value="Jakarta Utara">Jakarta Utara</option>
+                    </select>
+                </div>
+
+                <!-- Reset Filter Button -->
+                <div class="lg:col-span-1 flex items-end">
+                    <button type="button" onclick="resetFilters()" class="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition flex items-center justify-center" title="Reset Filter">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Material Counter Banner -->
+        <div class="flex items-center justify-between mb-6 text-sm text-slate-500">
+            <div id="counter-text">
+                Memuat katalog...
+            </div>
+            <div class="text-xs">
+                Real-time di browser
+            </div>
+        </div>
+
+        <!-- MATERIAL GRID -->
+        <div id="materials-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Rendered by JS -->
+        </div>
+
+    </main>
+
+    <!-- MODAL POPUP PENGAJUAN PENGAMBILAN MATERIAL -->
+    <div id="claimModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative">
+            
+            <button type="button" onclick="closeClaimModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 p-1 rounded-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+
+            <div class="mb-5">
+                <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
+                    Konfirmasi Sirkular
+                </span>
+                <h3 class="text-xl font-bold text-slate-900 mt-2">
+                    Ajukan Pengambilan Material
+                </h3>
+                <p class="text-xs text-slate-500 mt-1">
+                    Kolaborasikan pemanfaatan material sisa secara langsung dengan UMKM penyedia.
+                </p>
+            </div>
+
+            <!-- Material Summary Box -->
+            <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-4 mb-5 text-xs text-slate-700 space-y-1.5">
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Material:</span>
+                    <strong id="modalMatName" class="text-slate-900 text-right">-</strong>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Jumlah:</span>
+                    <strong id="modalMatQty" class="text-emerald-700">-</strong>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Penyedia:</span>
+                    <span id="modalMatOwner" class="font-medium text-slate-800">-</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-slate-500">Lokasi:</span>
+                    <span id="modalMatLoc" class="font-medium text-slate-800">-</span>
+                </div>
+            </div>
+
+            <!-- Form -->
+            <form id="claimForm" onsubmit="handleClaimSubmit(event)" class="space-y-4">
+                <input type="hidden" id="modalMatId" value="0">
+
+                <!-- Pilih Profil UMKM Pemohon -->
+                <div>
+                    <label for="modal-receiver-id" class="block text-xs font-bold text-slate-700 mb-1">Pilih UMKM Pemohon / Pengambil</label>
+                    <select id="modal-receiver-id" onchange="toggleNewReceiverFields(this.value)" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                        <!-- Populated by JS -->
+                    </select>
+                </div>
+
+                <!-- Input UMKM Baru jika belum terdaftar -->
+                <div id="newReceiverFields" class="hidden space-y-3 p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Usaha UMKM Anda</label>
+                        <input type="text" id="new-rec-name" placeholder="Contoh: Kriya Manik Johar" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Wilayah Anda</label>
+                            <select id="new-rec-wilayah" class="w-full px-2.5 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                <option value="Jakarta Selatan">Jakarta Selatan</option>
+                                <option value="Jakarta Pusat">Jakarta Pusat</option>
+                                <option value="Jakarta Barat">Jakarta Barat</option>
+                                <option value="Jakarta Timur">Jakarta Timur</option>
+                                <option value="Jakarta Utara">Jakarta Utara</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Kontak WhatsApp</label>
+                            <input type="text" id="new-rec-kontak" placeholder="08xxxxxxxxxx" class="w-full px-2.5 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Catatan Rencana Penggunaan -->
+                <div>
+                    <label for="modal-catatan" class="block text-xs font-bold text-slate-700 mb-1">Rencana Pemanfaatan & Catatan Logistik</label>
+                    <textarea id="modal-catatan" rows="3" required placeholder="Jelaskan produk apa yang akan dibuat dengan material ini, dan perkiraan tanggal penjemputan..." class="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white"></textarea>
+                </div>
+
+                <div class="pt-2 flex items-center justify-end space-x-3">
+                    <button type="button" onclick="closeClaimModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-xs font-semibold hover:bg-slate-50 transition">
+                        Batal
+                    </button>
+                    <button type="submit" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition">
+                        Kirim Pengajuan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-auto bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+        ReBahan &copy; 2026 - Platform Kolaborasi Ekonomi Sirkular UMKM Jakarta.
+    </footer>
+
+    <!-- SCRIPT DATA & ACTIONS -->
+    <script src="data.js"></script>
+    <script>
+        // Check url params for added notification
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('added') === '1') {
+            showAlert('Material sisa Anda berhasil didaftarkan ke katalog ReBahan! Menunggu UMKM yang membutuhkan.', 'success');
+        }
+
+        function showAlert(msg, type = 'success') {
+            const container = document.getElementById('alert-container');
+            const isSuccess = type === 'success';
+            container.innerHTML = `
+                <div class="mb-6 p-4 rounded-xl ${isSuccess ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-rose-50 border-rose-200 text-rose-800'} border flex items-start space-x-3 shadow-xs">
+                    <span class="text-lg">${isSuccess ? '✅' : '⚠️'}</span>
+                    <div class="text-sm">
+                        <strong>${isSuccess ? 'Berhasil!' : 'Perhatian:'}</strong> ${msg}
+                    </div>
+                    <button type="button" onclick="this.parentElement.remove()" class="ml-auto text-xs font-bold underline">Tutup</button>
+                </div>
+            `;
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const search = document.getElementById('search-input').value.toLowerCase().trim();
+            const kategori = document.getElementById('filter-kategori').value;
+            const wilayah = document.getElementById('filter-wilayah').value;
+
+            const allMaterials = getMaterials();
+            const filtered = allMaterials.filter(m => {
+                const matchSearch = !search || 
+                    m.nama_bahan.toLowerCase().includes(search) || 
+                    (m.deskripsi && m.deskripsi.toLowerCase().includes(search)) || 
+                    m.nama_usaha.toLowerCase().includes(search);
+                const matchKategori = !kategori || m.kategori === kategori;
+                const matchWilayah = !wilayah || m.wilayah === wilayah;
+                return matchSearch && matchKategori && matchWilayah;
+            });
+
+            // Update Counter
+            const counterEl = document.getElementById('counter-text');
+            counterEl.innerHTML = `Menampilkan <strong class="text-slate-800">${filtered.length}</strong> material terdaftar ${kategori ? `kategori <strong class="text-emerald-600">${kategori}</strong>` : ''} ${wilayah ? `di wilayah <strong class="text-emerald-600">${wilayah}</strong>` : ''}`;
+
+            // Render Grid
+            const grid = document.getElementById('materials-grid');
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full bg-white rounded-3xl border border-slate-200 p-12 text-center max-w-xl mx-auto shadow-sm my-8">
+                        <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">🔍</div>
+                        <h3 class="text-lg font-bold text-slate-800">Tidak Menemukan Material yang Sesuai</h3>
+                        <p class="text-slate-500 text-sm mt-1 mb-6">Coba ubah kata kunci pencarian atau bersihkan filter kategori dan wilayah.</p>
+                        <button onclick="resetFilters()" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold text-sm rounded-xl transition">
+                            Reset Filter
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(mat => {
+                const catMeta = getCategoryMeta(mat.kategori);
+                const isAvailable = mat.status === 'available';
+                const formattedQty = Number(mat.jumlah) === parseInt(mat.jumlah) ? parseInt(mat.jumlah) : Number(mat.jumlah).toFixed(1);
+
+                return `
+                    <div id="mat-${mat.id}" class="bg-white rounded-2xl border ${isAvailable ? 'border-slate-200 hover:border-emerald-300' : 'border-slate-200 bg-slate-50/70 opacity-80'} overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 flex flex-col">
+                        <div class="p-5 flex-1">
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold ${catMeta.bg} ${catMeta.text} border ${catMeta.border}">
+                                    <span class="mr-1">${catMeta.icon}</span>
+                                    ${mat.kategori}
+                                </span>
+                                ${isAvailable ? `
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">
+                                        Tersedia
+                                    </span>
+                                ` : mat.status === 'booked' ? `
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200 uppercase">
+                                        Dipesan
+                                    </span>
+                                ` : `
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-300 uppercase">
+                                        Selesai
+                                    </span>
+                                `}
+                            </div>
+
+                            <h3 class="text-lg font-bold text-slate-900 mb-1 leading-snug">
+                                ${mat.nama_bahan}
+                            </h3>
+
+                            <div class="flex items-baseline space-x-1.5 my-2.5">
+                                <span class="text-3xl font-black text-emerald-600">${formattedQty}</span>
+                                <span class="text-sm font-bold text-slate-700 uppercase">${mat.satuan}</span>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kondisi:</div>
+                                <div class="text-xs text-slate-700 font-medium bg-slate-50 p-2 rounded-lg border border-slate-100 mt-0.5">
+                                    ${mat.kondisi}
+                                </div>
+                            </div>
+
+                            ${mat.deskripsi ? `
+                                <p class="text-xs text-slate-500 mb-4 line-clamp-2">
+                                    ${mat.deskripsi}
+                                </p>
+                            ` : ''}
+
+                            <div class="pt-3 border-t border-slate-100 space-y-2 text-xs text-slate-600">
+                                <div class="flex items-center justify-between">
+                                    <span class="flex items-center">
+                                        <svg class="w-3.5 h-3.5 text-slate-400 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        <strong class="text-slate-700">${mat.wilayah}</strong>
+                                    </span>
+                                    <span class="text-[11px] text-slate-400">${mat.created_at.split(' ')[0]}</span>
+                                </div>
+                                <div class="flex items-center justify-between bg-emerald-50/50 p-2 rounded-lg border border-emerald-100/60">
+                                    <div class="truncate">
+                                        <span class="block text-[10px] text-emerald-800 font-semibold uppercase">Penyedia Material:</span>
+                                        <span class="font-bold text-slate-800">${mat.nama_usaha}</span>
+                                    </div>
+                                    <a href="https://wa.me/${mat.kontak.replace(/[^0-9]/g, '')}" target="_blank" class="px-2 py-1 text-[11px] font-bold text-emerald-700 bg-white hover:bg-emerald-100 rounded-md border border-emerald-200 flex items-center shadow-xs">
+                                        WA
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 border-t border-slate-100">
+                            ${isAvailable ? `
+                                <button type="button" onclick="openClaimModal(${mat.id})" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-semibold text-xs rounded-xl shadow-xs transition flex items-center justify-center">
+                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Ajukan Pengambilan
+                                </button>
+                            ` : `
+                                <button type="button" disabled class="w-full py-2.5 px-4 bg-slate-200 text-slate-400 font-medium text-xs rounded-xl cursor-not-allowed">
+                                    Sudah Tidak Tersedia
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('filter-kategori').value = '';
+            document.getElementById('filter-wilayah').value = '';
+            applyFilters();
+        }
+
+        // Claim Modal Actions
+        function populateReceiverDropdown() {
+            const users = getUsers();
+            const selectEl = document.getElementById('modal-receiver-id');
+            selectEl.innerHTML = `
+                <option value="">-- Pilih Profil UMKM Anda --</option>
+                ${users.map(u => `<option value="${u.id}">${u.nama_usaha} (${u.wilayah})</option>`).join('')}
+                <option value="0">+ Daftarkan UMKM Baru Saya</option>
+            `;
+        }
+
+        function openClaimModal(materialId) {
+            const materials = getMaterials();
+            const mat = materials.find(m => m.id === materialId);
+            if (!mat) return;
+
+            document.getElementById('modalMatId').value = mat.id;
+            document.getElementById('modalMatName').textContent = mat.nama_bahan;
+            document.getElementById('modalMatQty').textContent = `${mat.jumlah} ${mat.satuan}`;
+            document.getElementById('modalMatOwner').textContent = mat.nama_usaha;
+            document.getElementById('modalMatLoc').textContent = mat.wilayah;
+
+            populateReceiverDropdown();
+            document.getElementById('modal-catatan').value = '';
+            document.getElementById('newReceiverFields').classList.add('hidden');
+            document.getElementById('claimModal').classList.remove('hidden');
+        }
+
+        function closeClaimModal() {
+            document.getElementById('claimModal').classList.add('hidden');
+        }
+
+        function toggleNewReceiverFields(val) {
+            const el = document.getElementById('newReceiverFields');
+            if (val === '0') {
+                el.classList.remove('hidden');
+            } else {
+                el.classList.add('hidden');
+            }
+        }
+
+        function handleClaimSubmit(e) {
+            e.preventDefault();
+            const matId = parseInt(document.getElementById('modalMatId').value);
+            let receiverId = parseInt(document.getElementById('modal-receiver-id').value);
+            const catatan = document.getElementById('modal-catatan').value.trim();
+
+            if (!receiverId && receiverId !== 0) {
+                alert('Silakan pilih atau daftarkan profil UMKM Anda.');
+                return;
+            }
+
+            if (receiverId === 0) {
+                const newName = document.getElementById('new-rec-name').value.trim();
+                const newWilayah = document.getElementById('new-rec-wilayah').value;
+                const newKontak = document.getElementById('new-rec-kontak').value.trim();
+
+                if (!newName || !newKontak) {
+                    alert('Mohon lengkapi nama UMKM baru dan kontak WhatsApp.');
+                    return;
+                }
+
+                const newUser = addUser({
+                    nama_usaha: newName,
+                    wilayah: newWilayah,
+                    kontak: newKontak,
+                    sektor: 'Kerajinan'
+                });
+                receiverId = newUser.id;
+            }
+
+            createTransaction(matId, receiverId, catatan);
+            closeClaimModal();
+            showAlert('Pengajuan pengambilan material berhasil dikirim! Status transaksi kini: Pending (menunggu konfirmasi penyedia).', 'success');
+            applyFilters();
+        }
+
+        // Init page
+        applyFilters();
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+</body>
+</html>
+

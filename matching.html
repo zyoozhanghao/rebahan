@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Matching & Transaksi Sirkular - ReBahan</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- NAVBAR COMPONENT -->
+    <nav class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-sm transition-all duration-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3">
+                    <a href="index.html" class="flex items-center space-x-3 group">
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-200">
+                            <svg class="w-6 h-6 animate-[spin_10s_linear_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-2xl font-black tracking-tight text-slate-800">
+                                    Re<span class="text-emerald-600">Bahan</span>
+                                </span>
+                                <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    SIRKULAR UMKM
+                                </span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 hidden sm:block">Pemanfaatan Material Sisa Jakarta</p>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-1 lg:space-x-2">
+                    <a href="index.html" class="flex items-center px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        Dashboard & Impact
+                    </a>
+                    <a href="katalog.html" class="flex items-center px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        Katalog Material
+                    </a>
+                    <a href="penawaran.html" class="flex items-center px-3.5 py-2 rounded-xl text-sm font-medium text-slate-600 hover:text-emerald-600 hover:bg-slate-50 transition-all">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Pasang Penawaran
+                    </a>
+                    <a href="matching.html" class="flex items-center px-3.5 py-2 rounded-xl text-sm font-semibold bg-emerald-50 text-emerald-700 shadow-xs">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Smart Matching
+                    </a>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-3">
+                    <a href="penawaran.html" class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 shadow-sm transition-all">
+                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Pasang Bahan
+                    </a>
+                </div>
+
+                <div class="flex items-center md:hidden">
+                    <button type="button" id="mobile-menu-btn" class="p-2 rounded-xl text-slate-600 hover:text-emerald-600 hover:bg-slate-100 focus:outline-none">
+                        <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                        <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white/95 px-4 pt-3 pb-5 space-y-2">
+            <a href="index.html" class="flex items-center px-3 py-2.5 rounded-xl text-base font-medium text-slate-600">Dashboard & Impact</a>
+            <a href="katalog.html" class="flex items-center px-3 py-2.5 rounded-xl text-base font-medium text-slate-600">Katalog Material</a>
+            <a href="penawaran.html" class="flex items-center px-3 py-2.5 rounded-xl text-base font-medium text-slate-600">Pasang Penawaran</a>
+            <a href="matching.html" class="flex items-center px-3 py-2.5 rounded-xl text-base font-semibold bg-emerald-50 text-emerald-700">Smart Matching</a>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-10">
+        
+        <div>
+            <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 mb-2">
+                <span>⚡ ReBahan Circular Matching Engine</span>
+            </div>
+            <h1 class="text-3xl font-black text-slate-900 tracking-tight">
+                Smart Matching & Transaksi Material
+            </h1>
+            <p class="text-sm text-slate-600 mt-1">
+                Cocokkan kebutuhan bahan baku UMKM Anda dengan sumber sisa terdekat untuk menghemat biaya logistik dan menekan emisi karbon perkotaan.
+            </p>
+        </div>
+
+        <div id="feedback-alert" class="hidden p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm flex items-center justify-between shadow-xs">
+            <div class="flex items-center space-x-2">
+                <span>✅</span>
+                <span id="feedback-msg">Status transaksi berhasil diperbarui.</span>
+            </div>
+            <button type="button" onclick="document.getElementById('feedback-alert').classList.add('hidden')" class="text-xs font-bold underline">Tutup</button>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- BAGIAN 1: REKOMENDASI SMART MATCHING -->
+        <!-- ========================================================================= -->
+        <section class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center">
+                        <span class="mr-2 text-2xl">🎯</span>
+                        Rekomendasi Cerdas Bahan Baku
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-0.5">
+                        Algoritma mencocokkan prioritas kesamaan wilayah (zonasi Jakarta) dan kategori material.
+                    </p>
+                </div>
+                
+                <div class="flex flex-wrap sm:flex-nowrap items-center gap-2">
+                    <div>
+                        <select id="match-kategori" onchange="runSmartMatching()" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                            <option value="Kain/Tekstil">🧵 Kain/Tekstil</option>
+                            <option value="Kertas/Karton">📦 Kertas/Karton</option>
+                            <option value="Plastik">♻️ Plastik</option>
+                            <option value="Kayu/Bambu">🪵 Kayu/Bambu</option>
+                        </select>
+                    </div>
+                    <div>
+                        <select id="match-wilayah" onchange="runSmartMatching()" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                            <option value="Jakarta Selatan">Jakarta Selatan</option>
+                            <option value="Jakarta Pusat">Jakarta Pusat</option>
+                            <option value="Jakarta Barat">Jakarta Barat</option>
+                            <option value="Jakarta Timur">Jakarta Timur</option>
+                            <option value="Jakarta Utara">Jakarta Utara</option>
+                        </select>
+                    </div>
+                    <button type="button" onclick="runSmartMatching()" class="text-xs font-bold px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition">
+                        Cocokkan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Rekomendasi Grid -->
+            <div id="matching-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Rendered by JS -->
+            </div>
+        </section>
+
+        <!-- ========================================================================= -->
+        <!-- BAGIAN 2: TABEL TRANSAKSI AKTIF & SELESAI -->
+        <!-- ========================================================================= -->
+        <section class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-900 flex items-center">
+                        <span class="mr-2 text-2xl">📋</span>
+                        Daftar Transaksi & Kolaborasi Material
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-0.5">
+                        Pantau pergerakan dan status pengalihan material dari pemohon hingga diterima.
+                    </p>
+                </div>
+                <div id="trx-counter-badge" class="text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+                    Memuat transaksi...
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-500 border-b border-slate-200 uppercase tracking-wider font-semibold">
+                            <th class="py-3 px-4">ID & Tanggal</th>
+                            <th class="py-3 px-4">Material & Kuantitas</th>
+                            <th class="py-3 px-4">Penyedia (Sumber)</th>
+                            <th class="py-3 px-4">Pengambil (Pemanfaat)</th>
+                            <th class="py-3 px-4">Catatan Penggunaan</th>
+                            <th class="py-3 px-4">Status Transaksi</th>
+                            <th class="py-3 px-4 text-right">Ubah Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trx-table-body" class="divide-y divide-slate-100">
+                        <!-- Rendered by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto bg-white border-t border-slate-200 py-6 text-center text-xs text-slate-500">
+        ReBahan &copy; 2026 - Platform Kolaborasi Ekonomi Sirkular UMKM Jakarta.
+    </footer>
+
+    <!-- SCRIPT DATA & MATCHING -->
+    <script src="data.js"></script>
+    <script>
+        function runSmartMatching() {
+            const kategori = document.getElementById('match-kategori').value;
+            const wilayah = document.getElementById('match-wilayah').value;
+
+            const allMaterials = getMaterials().filter(m => m.status === 'available');
+
+            // Hitung score
+            const scored = allMaterials.map(m => {
+                let score = 50;
+                if (m.wilayah === wilayah && m.kategori === kategori) {
+                    score = 98;
+                } else if (m.kategori === kategori) {
+                    score = 85;
+                } else if (m.wilayah === wilayah) {
+                    score = 70;
+                }
+                return { ...m, match_score: score };
+            }).filter(m => m.match_score >= 70).sort((a, b) => b.match_score - a.match_score);
+
+            const grid = document.getElementById('matching-grid');
+            if (scored.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-10 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+                        <p class="text-sm text-slate-500">Tidak ada material sisa yang cocok langsung untuk filter ini saat ini.</p>
+                        <a href="katalog.html" class="inline-block mt-2 text-xs font-bold text-emerald-600 hover:underline">
+                            Lihat Seluruh Katalog &rarr;
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = scored.slice(0, 6).map(rm => {
+                const isSameRegion = rm.wilayah === wilayah;
+                const formattedQty = Number(rm.jumlah) === parseInt(rm.jumlah) ? parseInt(rm.jumlah) : Number(rm.jumlah).toFixed(1);
+
+                return `
+                    <div class="bg-gradient-to-b from-white to-slate-50/70 rounded-2xl border ${rm.match_score >= 90 ? 'border-emerald-300 shadow-sm' : 'border-slate-200'} p-5 flex flex-col justify-between hover:shadow-md transition">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold ${rm.match_score >= 90 ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800'}">
+                                    ⚡ Skor Cocok ${rm.match_score}%
+                                </span>
+                                ${isSameRegion ? `
+                                    <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                                        🌱 1 Wilayah (Hemat Emisi)
+                                    </span>
+                                ` : ''}
+                            </div>
+
+                            <h3 class="text-sm font-bold text-slate-900 line-clamp-1 mb-1">
+                                ${rm.nama_bahan}
+                            </h3>
+
+                            <div class="text-xs text-slate-500 mb-2">
+                                Kategori: <strong class="text-slate-700">${rm.kategori}</strong>
+                            </div>
+
+                            <div class="flex items-baseline space-x-1 my-2">
+                                <span class="text-2xl font-black text-emerald-600">${formattedQty}</span>
+                                <span class="text-xs font-bold text-slate-600 uppercase">${rm.satuan}</span>
+                            </div>
+
+                            <div class="text-xs text-slate-600 space-y-1 pt-2 border-t border-slate-100">
+                                <p><strong>Penyedia:</strong> ${rm.nama_usaha}</p>
+                                <p><strong>Lokasi:</strong> ${rm.wilayah}</p>
+                                <p class="text-[11px] text-slate-500 italic line-clamp-2">"${rm.kondisi}"</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                            <a href="https://wa.me/${rm.kontak.replace(/[^0-9]/g, '')}" target="_blank" class="text-xs font-bold text-emerald-600 hover:underline">
+                                Chat WA
+                            </a>
+                            <a href="katalog.html?detail=${rm.id}#mat-${rm.id}" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-xs">
+                                Ambil Bahan
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Render Table Transaksi
+        function renderTransactions() {
+            const trxs = getTransactions();
+            const tbody = document.getElementById('trx-table-body');
+            document.getElementById('trx-counter-badge').innerHTML = `Total: <strong class="text-slate-800">${trxs.length}</strong> Kolaborasi`;
+
+            if (trxs.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center py-8 text-slate-500">Belum ada transaksi kolaborasi sirkular.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = trxs.map(trx => {
+                const badge = getTrxStatusMeta(trx.status);
+                const formattedQty = Number(trx.jumlah) === parseInt(trx.jumlah) ? parseInt(trx.jumlah) : Number(trx.jumlah).toFixed(1);
+
+                return `
+                    <tr class="hover:bg-slate-50/80 transition-colors">
+                        <td class="py-3.5 px-4 whitespace-nowrap">
+                            <span class="font-bold text-slate-800">#TRX-${String(trx.id).padStart(3, '0')}</span>
+                            <div class="text-[11px] text-slate-400 mt-0.5">${trx.created_at}</div>
+                        </td>
+
+                        <td class="py-3.5 px-4">
+                            <div class="font-bold text-slate-900 max-w-[180px] truncate" title="${trx.nama_bahan}">
+                                ${trx.nama_bahan}
+                            </div>
+                            <div class="text-emerald-700 font-semibold mt-0.5">
+                                ${formattedQty} ${trx.satuan}
+                                <span class="text-slate-400 font-normal">(${trx.kategori})</span>
+                            </div>
+                        </td>
+
+                        <td class="py-3.5 px-4">
+                            <div class="font-medium text-slate-800">${trx.penyedia_nama}</div>
+                            <div class="text-[11px] text-slate-500">${trx.material_wilayah}</div>
+                            <a href="https://wa.me/${trx.penyedia_kontak ? trx.penyedia_kontak.replace(/[^0-9]/g, '') : ''}" target="_blank" class="text-[10px] text-emerald-600 hover:underline">
+                                WA: ${trx.penyedia_kontak}
+                            </a>
+                        </td>
+
+                        <td class="py-3.5 px-4">
+                            <div class="font-medium text-slate-800">${trx.pengambil_nama}</div>
+                            <div class="text-[11px] text-slate-500">${trx.pengambil_wilayah}</div>
+                            <a href="https://wa.me/${trx.pengambil_kontak ? trx.pengambil_kontak.replace(/[^0-9]/g, '') : ''}" target="_blank" class="text-[10px] text-emerald-600 hover:underline">
+                                WA: ${trx.pengambil_kontak}
+                            </a>
+                        </td>
+
+                        <td class="py-3.5 px-4 max-w-[200px]">
+                            <p class="text-slate-600 line-clamp-2 italic text-[11px]">
+                                ${trx.catatan || 'Tidak ada catatan'}
+                            </p>
+                        </td>
+
+                        <td class="py-3.5 px-4 whitespace-nowrap">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold ${badge.bg} ${badge.text} border ${badge.border}">
+                                <span class="w-1.5 h-1.5 rounded-full ${badge.dot} mr-1.5 animate-pulse"></span>
+                                ${trx.status}
+                            </span>
+                        </td>
+
+                        <td class="py-3.5 px-4 whitespace-nowrap text-right">
+                            <div class="inline-flex items-center space-x-1">
+                                ${trx.status === 'Pending' ? `
+                                    <button type="button" onclick="handleStatusChange(${trx.id}, 'Disetujui')" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-[11px] font-semibold transition">
+                                        Setujui
+                                    </button>
+                                ` : trx.status === 'Disetujui' ? `
+                                    <button type="button" onclick="handleStatusChange(${trx.id}, 'Dalam Pengambilan')" class="px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-md text-[11px] font-semibold transition">
+                                        Diambil
+                                    </button>
+                                ` : trx.status === 'Dalam Pengambilan' ? `
+                                    <button type="button" onclick="handleStatusChange(${trx.id}, 'Selesai')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-[11px] font-semibold transition">
+                                        Selesai
+                                    </button>
+                                ` : `
+                                    <span class="text-[11px] text-emerald-600 font-bold">✓ Terserap</span>
+                                `}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function handleStatusChange(trxId, newStatus) {
+            updateTransactionStatus(trxId, newStatus);
+            renderTransactions();
+            runSmartMatching();
+
+            const alertEl = document.getElementById('feedback-alert');
+            document.getElementById('feedback-msg').textContent = `Status transaksi #TRX-${String(trxId).padStart(3, '0')} berhasil diubah menjadi '${newStatus}'.`;
+            alertEl.classList.remove('hidden');
+        }
+
+        // Init
+        runSmartMatching();
+        renderTransactions();
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (mobileBtn && mobileMenu) {
+            mobileBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+        }
+    </script>
+</body>
+</html>
+
