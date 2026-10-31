@@ -83,6 +83,7 @@ $transactions = [];
 try {
     $stmtTrx = $pdo->query("
         SELECT t.*, 
+               COALESCE(t.reason_notes, t.catatan, '') AS alasan_pengambilan,
                m.nama_bahan, m.jumlah, m.satuan, m.kategori, m.wilayah AS material_wilayah,
                u_prov.nama_usaha AS penyedia_nama, u_prov.kontak AS penyedia_kontak,
                u_recv.nama_usaha AS pengambil_nama, u_recv.wilayah AS pengambil_wilayah, u_recv.kontak AS pengambil_kontak
@@ -289,7 +290,7 @@ function getTrxStatusBadge($status) {
                                 <th class="py-3 px-4">Material & Kuantitas</th>
                                 <th class="py-3 px-4">Penyedia (Sumber)</th>
                                 <th class="py-3 px-4">Pengambil (Pemanfaat)</th>
-                                <th class="py-3 px-4">Catatan Penggunaan</th>
+                                <th class="py-3 px-4">Alasan & Rencana Penggunaan</th>
                                 <th class="py-3 px-4">Status Transaksi</th>
                                 <th class="py-3 px-4 text-right">Ubah Status</th>
                             </tr>
@@ -297,6 +298,7 @@ function getTrxStatusBadge($status) {
                         <tbody class="divide-y divide-slate-100">
                             <?php foreach ($transactions as $trx): 
                                 $badge = getTrxStatusBadge($trx['status']);
+                                $alasanText = $trx['alasan_pengambilan'] ?: ($trx['reason_notes'] ?? ($trx['catatan'] ?? ''));
                             ?>
                                 <tr class="hover:bg-slate-50/80 transition-colors">
                                     <!-- ID & Tanggal -->
@@ -336,10 +338,10 @@ function getTrxStatusBadge($status) {
                                         </a>
                                     </td>
 
-                                    <!-- Catatan -->
-                                    <td class="py-3.5 px-4 max-w-[200px]">
-                                        <p class="text-slate-600 line-clamp-2 italic text-[11px]">
-                                            <?= htmlspecialchars($trx['catatan'] ?: 'Tidak ada catatan') ?>
+                                    <!-- Alasan & Rencana Penggunaan -->
+                                    <td class="py-3.5 px-4 max-w-[220px]">
+                                        <p class="text-slate-700 font-medium line-clamp-3 text-[11px] leading-relaxed" title="<?= htmlspecialchars($alasanText ?: 'Tidak ada keterangan') ?>">
+                                            <?= htmlspecialchars($alasanText ?: 'Tidak ada keterangan') ?>
                                         </p>
                                     </td>
 

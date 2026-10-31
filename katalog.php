@@ -23,10 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $namaReceiverBaru = trim($_POST['nama_receiver_baru'] ?? '');
     $kontakReceiverBaru = trim($_POST['kontak_receiver_baru'] ?? '');
     $wilayahReceiverBaru = trim($_POST['wilayah_receiver_baru'] ?? 'Jakarta Selatan');
-    $catatan = trim($_POST['catatan'] ?? '');
+    $alasanPengambilan = trim($_POST['alasan_pengambilan'] ?? $_POST['catatan'] ?? '');
 
     if ($materialId <= 0) {
         $errorMsg = "Material yang dipilih tidak valid.";
+    } elseif (empty($alasanPengambilan)) {
+        $errorMsg = "Alasan & rencana penggunaan material wajib diisi.";
     } else {
         try {
             // Jika memilih "Buat Profil UMKM Baru"
@@ -40,12 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             }
 
             if ($receiverId > 0) {
-                // Buat transaksi baru
+                // Buat transaksi baru dengan alasan_pengambilan (reason_notes & catatan)
                 $stmtInsertTrx = $pdo->prepare("
-                    INSERT INTO transactions (material_id, receiver_id, catatan, status) 
-                    VALUES (?, ?, ?, 'Pending')
+                    INSERT INTO transactions (material_id, receiver_id, reason_notes, catatan, status) 
+                    VALUES (?, ?, ?, ?, 'Pending')
                 ");
-                $stmtInsertTrx->execute([$materialId, $receiverId, $catatan]);
+                $stmtInsertTrx->execute([$materialId, $receiverId, $alasanPengambilan, $alasanPengambilan]);
 
                 $successMsg = "Pengajuan pengambilan material berhasil dikirim! Status transaksi kini: Pending (menunggu konfirmasi penyedia).";
             } else {
@@ -117,7 +119,7 @@ function getCategoryMeta($kategori) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katalog Material Sisa - ReBahan</title>
+    <title>ReBahan: Inovasi Platform Digital untuk Kolaborasi Pemanfaatan Material Sisa dan Kebutuhan Bahan Baku UMKM</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen">
@@ -469,10 +471,12 @@ function getCategoryMeta($kategori) {
                     </div>
                 </div>
 
-                <!-- Catatan Rencana Penggunaan -->
+                <!-- Alasan & Rencana Penggunaan Material -->
                 <div>
-                    <label for="catatan" class="block text-xs font-bold text-slate-700 mb-1">Rencana Pemanfaatan & Catatan Logistik</label>
-                    <textarea id="catatan" name="catatan" rows="3" required placeholder="Jelaskan produk apa yang akan dibuat dengan material ini, dan perkiraan tanggal penjemputan..." class="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white"></textarea>
+                    <label for="alasan_pengambilan" class="block text-xs font-bold text-slate-700 mb-1">
+                        Alasan & Rencana Penggunaan Material <span class="text-rose-500">*</span>
+                    </label>
+                    <textarea id="alasan_pengambilan" name="alasan_pengambilan" rows="3" required placeholder="Jelaskan secara detail alasan kebutuhan dan rencana penggunaan material ini untuk produk UMKM Anda, estimasi jadwal penjemputan, dll." class="w-full px-3 py-2 text-xs rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white"></textarea>
                 </div>
 
                 <!-- Action Buttons -->
@@ -495,6 +499,8 @@ function getCategoryMeta($kategori) {
             document.getElementById('modalMatQty').textContent = qty;
             document.getElementById('modalMatOwner').textContent = owner;
             document.getElementById('modalMatLoc').textContent = loc;
+            const textarea = document.getElementById('alasan_pengambilan');
+            if (textarea) textarea.value = '';
             document.getElementById('claimModal').classList.remove('hidden');
         }
 

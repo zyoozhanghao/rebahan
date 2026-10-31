@@ -18,7 +18,7 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
     ");
     $logs[] = "Tabel 'users' siap.";
 
-    // 2. Buat Tabel `materials`
+    // 2. Buat Tabel `materials` (Dilengkapi Atribut B2B Marketplace Sesuai Spesifikasi Paper Kelompok 2)
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS `materials` (
             `id` INT AUTO_INCREMENT PRIMARY KEY,
@@ -27,6 +27,11 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
             `kategori` ENUM('Kain/Tekstil', 'Kertas/Karton', 'Plastik', 'Kayu/Bambu') NOT NULL,
             `jumlah` DECIMAL(10,2) NOT NULL,
             `satuan` VARCHAR(50) NOT NULL,
+            `harga_per_satuan` DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+            `satuan_jual` ENUM('kg', 'borongan') NOT NULL DEFAULT 'kg',
+            `ukuran_pecahan` VARCHAR(100) NOT NULL DEFAULT '0.5m - 3m',
+            `kelas_bahan` ENUM('Premium', 'Standar') NOT NULL DEFAULT 'Standar',
+            `jenis_motif` VARCHAR(150) NOT NULL DEFAULT 'Polos',
             `kondisi` VARCHAR(150) NOT NULL,
             `wilayah` ENUM('Jakarta Selatan', 'Jakarta Pusat', 'Jakarta Barat', 'Jakarta Timur', 'Jakarta Utara') NOT NULL,
             `deskripsi` TEXT NULL,
@@ -35,6 +40,16 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
             CONSTRAINT `fk_materials_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     ");
+
+    // Pastikan kolom baru B2B marketplace ditambahkan jika tabel sudah dibuat sebelumnya
+    try {
+        $pdo->exec("ALTER TABLE `materials` ADD COLUMN IF NOT EXISTS `harga_per_satuan` DECIMAL(12,2) NOT NULL DEFAULT 0.00 AFTER `satuan`");
+        $pdo->exec("ALTER TABLE `materials` ADD COLUMN IF NOT EXISTS `satuan_jual` ENUM('kg', 'borongan') NOT NULL DEFAULT 'kg' AFTER `harga_per_satuan`");
+        $pdo->exec("ALTER TABLE `materials` ADD COLUMN IF NOT EXISTS `ukuran_pecahan` VARCHAR(100) NOT NULL DEFAULT '0.5m - 3m' AFTER `satuan_jual`");
+        $pdo->exec("ALTER TABLE `materials` ADD COLUMN IF NOT EXISTS `kelas_bahan` ENUM('Premium', 'Standar') NOT NULL DEFAULT 'Standar' AFTER `ukuran_pecahan`");
+        $pdo->exec("ALTER TABLE `materials` ADD COLUMN IF NOT EXISTS `jenis_motif` VARCHAR(150) NOT NULL DEFAULT 'Polos' AFTER `kelas_bahan`");
+    } catch (\Throwable $t) {}
+
     $logs[] = "Tabel 'materials' siap.";
 
     // 3. Buat Tabel `transactions`
@@ -43,6 +58,7 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
             `id` INT AUTO_INCREMENT PRIMARY KEY,
             `material_id` INT NOT NULL,
             `receiver_id` INT NOT NULL,
+            `reason_notes` TEXT NULL,
             `catatan` TEXT NULL,
             `status` ENUM('Pending', 'Disetujui', 'Dalam Pengambilan', 'Selesai') DEFAULT 'Pending',
             `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -50,6 +66,12 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
             CONSTRAINT `fk_transactions_receiver` FOREIGN KEY (`receiver_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
     ");
+
+    // Pastikan kolom reason_notes ada jika tabel dibuat dari versi terdahulu
+    try {
+        $pdo->exec("ALTER TABLE `transactions` ADD COLUMN IF NOT EXISTS `reason_notes` TEXT NULL AFTER `receiver_id`");
+    } catch (\Throwable $t) {}
+
     $logs[] = "Tabel 'transactions' siap.";
 
     // 4. Seeding Data Dummy Pengguna (UMKM Jakarta)
@@ -98,9 +120,14 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
                 'Kain/Tekstil',
                 35.50,
                 'kg',
+                60000.00,
+                'kg',
+                '0.5m - 3m',
+                'Premium',
+                'Rayon Corak Bunga & Polos',
                 'Bersih, Kering, Potongan baru sisa jahitan dress',
                 'Jakarta Selatan',
-                'Sangat cocok untuk produk kerajinan scrunchie, sarung bantal patchwork, masker kain, atau tote bag.',
+                'Sangat cocok untuk produk kerajinan scrunchie, sarung bantal patchwork, masker kain, atau tote bag (isi ~6 meter/kg).',
                 'available'
             ],
             [
@@ -109,6 +136,11 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
                 'Kertas/Karton',
                 50.00,
                 'kg',
+                25000.00,
+                'kg',
+                'Lembaran A3 - A2',
+                'Premium',
+                'Putih Bersih Glossy 260gsm',
                 'Potongan presisi, bersih & rapi',
                 'Jakarta Pusat',
                 'Sisa pemotongan cetak cover buku dan kalender meja tahunan. Cocok untuk hangtag pakaian atau notebook daur ulang.',
@@ -120,6 +152,11 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
                 'Kayu/Bambu',
                 40.00,
                 'pcs',
+                35000.00,
+                'borongan',
+                'Balok & Papan 100cm - 120cm',
+                'Standar',
+                'Serat Kayu Pinus Alami',
                 'Kayu utuh, kering oven, bebas paku berlebih',
                 'Jakarta Selatan',
                 'Papan palet kayu sisa unboxing kargo industri Mampang. Sangat bagus untuk rak hidroponik mini, ambalan dinding, atau meja cafe rustic.',
@@ -131,6 +168,11 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
                 'Kain/Tekstil',
                 22.00,
                 'meter',
+                55000.00,
+                'kg',
+                '1m - 3.5m',
+                'Premium',
+                'Twill Navy & Denim Indigo',
                 'Bersih potongan rol ujung (lebar 40-60 cm)',
                 'Jakarta Barat',
                 'Material kuat dan kokoh untuk aksesoris fashion, dompet koin, atau tatakan gelas ramah lingkungan.',
@@ -142,6 +184,11 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
                 'Plastik',
                 75.00,
                 'kg',
+                18000.00,
+                'kg',
+                'Flakes / Serpihan 5mm',
+                'Standar',
+                'Polimer Terpilah Biru & Putih',
                 'Sudah dicuci, dipotong kecil 5mm, warna seragam',
                 'Jakarta Barat',
                 'Hasil olahan pemilahan wadah botol susu dan tutup galon. Siap untuk proses injeksi moulding pot tanaman atau gantungan kunci.',
@@ -153,6 +200,11 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
                 'Kertas/Karton',
                 65.00,
                 'kg',
+                12000.00,
+                'kg',
+                'Lembaran Utuh 60x80cm',
+                'Standar',
+                'Cokelat Polos Double Wall',
                 'Sudah dipipihkan, bersih dari minyak, kering',
                 'Jakarta Timur',
                 'Bahan kemasan sisa impor logistik pergudangan. Dapat dipakai kembali langsung untuk packaging produk UMKM lokal.',
@@ -164,6 +216,11 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
                 'Kayu/Bambu',
                 18.00,
                 'pcs',
+                20000.00,
+                'borongan',
+                'Batang 80cm - 120cm',
+                'Premium',
+                'Bambu Alami Awet',
                 'Panjang 80-120 cm, diawetkan anti-rayap',
                 'Jakarta Utara',
                 'Sisa pengerjaan gazebo dan mebel bambu pesanan taman kota. Cocok untuk kerajinan wadah aromaterapi, vas bunga, atau lampion.',
@@ -175,6 +232,11 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
                 'Kain/Tekstil',
                 15.00,
                 'kg',
+                25000.00,
+                'kg',
+                '0.8m - 2m',
+                'Standar',
+                'Putih & Krem Polos',
                 'Kondisi baru lembaran bersih',
                 'Jakarta Selatan',
                 'Material sisa pembuatan kantong belanja ramah lingkungan pesanan komunitas. Bagus untuk lapisan dalam tas atau pouch.',
@@ -184,9 +246,14 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
 
         $insertMat = $pdo->prepare("
             INSERT INTO `materials` 
-            (`user_id`, `nama_bahan`, `kategori`, `jumlah`, `satuan`, `kondisi`, `wilayah`, `deskripsi`, `status`) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (`user_id`, `nama_bahan`, `kategori`, `jumlah`, `satuan`, `harga_per_satuan`, `satuan_jual`, `ukuran_pecahan`, `kelas_bahan`, `jenis_motif`, `kondisi`, `wilayah`, `deskripsi`, `status`) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
+        foreach ($materialsData as $m) {
+            $insertMat->execute($m);
+        }
+        $logs[] = "Seeding data Material Sisa berhasil (" . count($materialsData) . " material ditambahkan).";
+    }
         foreach ($materialsData as $m) {
             $insertMat->execute($m);
         }
@@ -231,11 +298,11 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
             ];
 
             $insertTrx = $pdo->prepare("
-                INSERT INTO `transactions` (`material_id`, `receiver_id`, `catatan`, `status`) 
-                VALUES (?, ?, ?, ?)
+                INSERT INTO `transactions` (`material_id`, `receiver_id`, `reason_notes`, `catatan`, `status`) 
+                VALUES (?, ?, ?, ?, ?)
             ");
             foreach ($transData as $t) {
-                $insertTrx->execute($t);
+                $insertTrx->execute([$t[0], $t[1], $t[2], $t[2], $t[3]]);
             }
             $logs[] = "Seeding data Transaksi berhasil (" . count($transData) . " transaksi awal dibuat).";
         }

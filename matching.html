@@ -178,7 +178,7 @@
                             <th class="py-3 px-4">Material & Kuantitas</th>
                             <th class="py-3 px-4">Penyedia (Sumber)</th>
                             <th class="py-3 px-4">Pengambil (Pemanfaat)</th>
-                            <th class="py-3 px-4">Catatan Penggunaan</th>
+                            <th class="py-3 px-4">Alasan & Rencana Penggunaan</th>
                             <th class="py-3 px-4">Status Transaksi</th>
                             <th class="py-3 px-4 text-right">Ubah Status</th>
                         </tr>
@@ -335,9 +335,9 @@
                             </a>
                         </td>
 
-                        <td class="py-3.5 px-4 max-w-[200px]">
-                            <p class="text-slate-600 line-clamp-2 italic text-[11px]">
-                                ${trx.catatan || 'Tidak ada catatan'}
+                        <td class="py-3.5 px-4 max-w-[220px]">
+                            <p class="text-slate-700 font-medium line-clamp-3 text-[11px] leading-relaxed" title="${trx.alasan_pengambilan || trx.reason_notes || trx.catatan || 'Tidak ada keterangan'}">
+                                ${trx.alasan_pengambilan || trx.reason_notes || trx.catatan || 'Tidak ada keterangan'}
                             </p>
                         </td>
 

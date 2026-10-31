@@ -22,9 +22,14 @@ const DEFAULT_MATERIALS = [
     kategori: 'Kain/Tekstil',
     jumlah: 35.5,
     satuan: 'kg',
+    harga_per_satuan: 60000,
+    satuan_jual: 'kg',
+    ukuran_pecahan: '0.5m - 3m',
+    kelas_bahan: 'Premium',
+    jenis_motif: 'Rayon Corak Bunga & Polos',
     kondisi: 'Bersih, Kering, Potongan baru sisa jahitan dress',
     wilayah: 'Jakarta Selatan',
-    deskripsi: 'Sangat cocok untuk produk kerajinan scrunchie, sarung bantal patchwork, masker kain, atau tote bag.',
+    deskripsi: 'Sangat cocok untuk produk kerajinan scrunchie, sarung bantal patchwork, masker kain, atau tote bag (estimasi ~6 meter/kg).',
     status: 'available',
     created_at: '2026-10-28 09:30:00'
   },
@@ -35,6 +40,11 @@ const DEFAULT_MATERIALS = [
     kategori: 'Kertas/Karton',
     jumlah: 50.0,
     satuan: 'kg',
+    harga_per_satuan: 25000,
+    satuan_jual: 'kg',
+    ukuran_pecahan: 'Lembaran A3 - A2',
+    kelas_bahan: 'Premium',
+    jenis_motif: 'Putih Bersih Glossy 260gsm',
     kondisi: 'Potongan presisi, bersih & rapi',
     wilayah: 'Jakarta Pusat',
     deskripsi: 'Sisa pemotongan cetak cover buku dan kalender meja tahunan. Cocok untuk hangtag pakaian atau notebook daur ulang.',
@@ -48,6 +58,11 @@ const DEFAULT_MATERIALS = [
     kategori: 'Kayu/Bambu',
     jumlah: 40.0,
     satuan: 'pcs',
+    harga_per_satuan: 35000,
+    satuan_jual: 'borongan',
+    ukuran_pecahan: 'Balok & Papan 100cm - 120cm',
+    kelas_bahan: 'Standar',
+    jenis_motif: 'Serat Kayu Pinus Alami',
     kondisi: 'Kayu utuh, kering oven, bebas paku berlebih',
     wilayah: 'Jakarta Selatan',
     deskripsi: 'Papan palet kayu sisa unboxing kargo industri Mampang. Sangat bagus untuk rak hidroponik mini, ambalan dinding, atau meja cafe rustic.',
@@ -61,6 +76,11 @@ const DEFAULT_MATERIALS = [
     kategori: 'Kain/Tekstil',
     jumlah: 22.0,
     satuan: 'meter',
+    harga_per_satuan: 55000,
+    satuan_jual: 'kg',
+    ukuran_pecahan: '1m - 3.5m',
+    kelas_bahan: 'Premium',
+    jenis_motif: 'Twill Navy & Denim Indigo',
     kondisi: 'Bersih potongan rol ujung (lebar 40-60 cm)',
     wilayah: 'Jakarta Barat',
     deskripsi: 'Material kuat dan kokoh untuk aksesoris fashion, dompet koin, atau tatakan gelas ramah lingkungan.',
@@ -74,6 +94,11 @@ const DEFAULT_MATERIALS = [
     kategori: 'Plastik',
     jumlah: 75.0,
     satuan: 'kg',
+    harga_per_satuan: 18000,
+    satuan_jual: 'kg',
+    ukuran_pecahan: 'Flakes / Serpihan 5mm',
+    kelas_bahan: 'Standar',
+    jenis_motif: 'Polimer Terpilah Biru & Putih',
     kondisi: 'Sudah dicuci, dipotong kecil 5mm, warna seragam',
     wilayah: 'Jakarta Barat',
     deskripsi: 'Hasil olahan pemilahan wadah botol susu dan tutup galon. Siap untuk proses injeksi moulding pot tanaman atau gantungan kunci.',
@@ -87,6 +112,11 @@ const DEFAULT_MATERIALS = [
     kategori: 'Kertas/Karton',
     jumlah: 65.0,
     satuan: 'kg',
+    harga_per_satuan: 12000,
+    satuan_jual: 'kg',
+    ukuran_pecahan: 'Lembaran Utuh 60x80cm',
+    kelas_bahan: 'Standar',
+    jenis_motif: 'Cokelat Polos Double Wall',
     kondisi: 'Sudah dipipihkan, bersih dari minyak, kering',
     wilayah: 'Jakarta Timur',
     deskripsi: 'Bahan kemasan sisa impor logistik pergudangan. Dapat dipakai kembali langsung untuk packaging produk UMKM lokal.',
@@ -100,6 +130,11 @@ const DEFAULT_MATERIALS = [
     kategori: 'Kayu/Bambu',
     jumlah: 18.0,
     satuan: 'pcs',
+    harga_per_satuan: 20000,
+    satuan_jual: 'borongan',
+    ukuran_pecahan: 'Batang 80cm - 120cm',
+    kelas_bahan: 'Premium',
+    jenis_motif: 'Bambu Alami Awet',
     kondisi: 'Panjang 80-120 cm, diawetkan anti-rayap',
     wilayah: 'Jakarta Utara',
     deskripsi: 'Sisa pengerjaan gazebo dan mebel bambu pesanan taman kota. Cocok untuk kerajinan wadah aromaterapi, vas bunga, atau lampion.',
@@ -113,6 +148,11 @@ const DEFAULT_MATERIALS = [
     kategori: 'Kain/Tekstil',
     jumlah: 15.0,
     satuan: 'kg',
+    harga_per_satuan: 25000,
+    satuan_jual: 'kg',
+    ukuran_pecahan: '0.8m - 2m',
+    kelas_bahan: 'Standar',
+    jenis_motif: 'Putih & Krem Polos',
     kondisi: 'Kondisi baru lembaran bersih',
     wilayah: 'Jakarta Selatan',
     deskripsi: 'Material sisa pembuatan kantong belanja ramah lingkungan pesanan komunitas. Bagus untuk lapisan dalam tas atau pouch.',
@@ -126,6 +166,8 @@ const DEFAULT_TRANSACTIONS = [
     id: 1,
     material_id: 1,
     receiver_id: 4,
+    alasan_pengambilan: 'Kain perca akan dimanfaatkan untuk kerajinan pouch belanja pameran UMKM Jakarta Kreatif.',
+    reason_notes: 'Kain perca akan dimanfaatkan untuk kerajinan pouch belanja pameran UMKM Jakarta Kreatif.',
     catatan: 'Kain perca akan dimanfaatkan untuk kerajinan pouch belanja pameran UMKM Jakarta Kreatif.',
     status: 'Disetujui',
     created_at: '2026-10-28 14:00:00'
@@ -134,6 +176,8 @@ const DEFAULT_TRANSACTIONS = [
     id: 2,
     material_id: 2,
     receiver_id: 9,
+    alasan_pengambilan: 'Dibutuhkan untuk hangtag dan label sertifikat produk ramah lingkungan.',
+    reason_notes: 'Dibutuhkan untuk hangtag dan label sertifikat produk ramah lingkungan.',
     catatan: 'Dibutuhkan untuk hangtag dan label sertifikat produk ramah lingkungan.',
     status: 'Pending',
     created_at: '2026-10-28 16:30:00'
@@ -142,6 +186,8 @@ const DEFAULT_TRANSACTIONS = [
     id: 3,
     material_id: 3,
     receiver_id: 4,
+    alasan_pengambilan: 'Untuk display booth pameran UMKM sirkular di Senayan.',
+    reason_notes: 'Untuk display booth pameran UMKM sirkular di Senayan.',
     catatan: 'Untuk display booth pameran UMKM sirkular di Senayan.',
     status: 'Dalam Pengambilan',
     created_at: '2026-10-29 09:15:00'
@@ -150,6 +196,8 @@ const DEFAULT_TRANSACTIONS = [
     id: 4,
     material_id: 8,
     receiver_id: 9,
+    alasan_pengambilan: 'Selesai diambil pada tanggal 26 Oktober 2026. Bahan telah diolah menjadi 50 kantong reusable.',
+    reason_notes: 'Selesai diambil pada tanggal 26 Oktober 2026. Bahan telah diolah menjadi 50 kantong reusable.',
     catatan: 'Selesai diambil pada tanggal 26 Oktober 2026. Bahan telah diolah menjadi 50 kantong reusable.',
     status: 'Selesai',
     created_at: '2026-10-26 16:00:00'
@@ -163,9 +211,47 @@ function initDataStore() {
   }
   if (!localStorage.getItem('rebahan_materials')) {
     localStorage.setItem('rebahan_materials', JSON.stringify(DEFAULT_MATERIALS));
+  } else {
+    // Migrasi data material jika atribut B2B marketplace belum ada
+    try {
+      const stored = JSON.parse(localStorage.getItem('rebahan_materials')) || [];
+      let updated = false;
+      stored.forEach(m => {
+        if (m.harga_per_satuan === undefined || m.satuan_jual === undefined) {
+          const matchDefault = DEFAULT_MATERIALS.find(dm => dm.id === m.id);
+          m.harga_per_satuan = matchDefault ? matchDefault.harga_per_satuan : 50000;
+          m.satuan_jual = matchDefault ? matchDefault.satuan_jual : (m.satuan === 'pcs' ? 'borongan' : 'kg');
+          m.ukuran_pecahan = matchDefault ? matchDefault.ukuran_pecahan : '0.5m - 3m';
+          m.kelas_bahan = matchDefault ? matchDefault.kelas_bahan : 'Standar';
+          m.jenis_motif = matchDefault ? matchDefault.jenis_motif : 'Polos / Corak';
+          updated = true;
+        }
+      });
+      if (updated) {
+        localStorage.setItem('rebahan_materials', JSON.stringify(stored));
+      }
+    } catch (e) {}
   }
   if (!localStorage.getItem('rebahan_transactions')) {
     localStorage.setItem('rebahan_transactions', JSON.stringify(DEFAULT_TRANSACTIONS));
+  } else {
+    // Migrasi data transaksi lawas jika belum memiliki alasan_pengambilan / reason_notes
+    try {
+      const stored = JSON.parse(localStorage.getItem('rebahan_transactions')) || [];
+      let updated = false;
+      stored.forEach(t => {
+        const text = t.alasan_pengambilan || t.reason_notes || t.catatan || '';
+        if (!t.alasan_pengambilan || !t.reason_notes) {
+          t.alasan_pengambilan = text;
+          t.reason_notes = text;
+          t.catatan = text;
+          updated = true;
+        }
+      });
+      if (updated) {
+        localStorage.setItem('rebahan_transactions', JSON.stringify(stored));
+      }
+    } catch (e) {}
   }
 }
 
@@ -183,6 +269,11 @@ function getMaterials() {
     const user = users.find(u => u.id === m.user_id) || { nama_usaha: 'UMKM Jakarta', kontak: '0812-0000-0000', sektor: 'Kerajinan' };
     return {
       ...m,
+      harga_per_satuan: parseFloat(m.harga_per_satuan) || 50000,
+      satuan_jual: m.satuan_jual || 'kg',
+      ukuran_pecahan: m.ukuran_pecahan || '0.5m - 3m',
+      kelas_bahan: m.kelas_bahan || 'Standar',
+      jenis_motif: m.jenis_motif || 'Polos / Corak',
       nama_usaha: user.nama_usaha,
       kontak: user.kontak,
       sektor: user.sektor
@@ -211,8 +302,12 @@ function getTransactions() {
       wilayah: 'Jakarta',
       kontak: '08xx'
     };
+    const reason = t.alasan_pengambilan || t.reason_notes || t.catatan || '';
     return {
       ...t,
+      alasan_pengambilan: reason,
+      reason_notes: reason,
+      catatan: reason,
       nama_bahan: material.nama_bahan,
       jumlah: material.jumlah,
       satuan: material.satuan,
@@ -273,6 +368,11 @@ function addMaterial(matData) {
     kategori: matData.kategori,
     jumlah: parseFloat(matData.jumlah),
     satuan: matData.satuan,
+    harga_per_satuan: parseFloat(matData.harga_per_satuan) || 0,
+    satuan_jual: matData.satuan_jual || 'kg',
+    ukuran_pecahan: matData.ukuran_pecahan || '0.5m - 3m',
+    kelas_bahan: matData.kelas_bahan || 'Standar',
+    jenis_motif: matData.jenis_motif || 'Polos',
     kondisi: matData.kondisi,
     wilayah: matData.wilayah,
     deskripsi: matData.deskripsi || '',
@@ -286,16 +386,21 @@ function addMaterial(matData) {
 }
 
 // Buat Transaksi Baru
-function createTransaction(materialId, receiverId, catatan) {
+function createTransaction(materialId, receiverId, alasanPengambilan, jumlahAmbil = null, estimasiBiaya = null) {
   const transactions = JSON.parse(localStorage.getItem('rebahan_transactions')) || [];
   const newId = transactions.length > 0 ? Math.max(...transactions.map(t => t.id)) + 1 : 1;
   const now = new Date().toISOString().replace('T', ' ').substring(0, 19);
+  const text = alasanPengambilan || '';
 
   const newTrx = {
     id: newId,
     material_id: parseInt(materialId),
     receiver_id: parseInt(receiverId),
-    catatan: catatan,
+    jumlah_ambil: jumlahAmbil !== null ? parseFloat(jumlahAmbil) : null,
+    estimasi_biaya: estimasiBiaya !== null ? parseFloat(estimasiBiaya) : null,
+    alasan_pengambilan: text,
+    reason_notes: text,
+    catatan: text,
     status: 'Pending',
     created_at: now
   };

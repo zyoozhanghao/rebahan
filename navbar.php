@@ -46,10 +46,10 @@ $navLinks = [
                                 Re<span class="text-emerald-600">Bahan</span>
                             </span>
                             <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                SIRKULAR UMKM
+                                B2B SIRKULAR UMKM
                             </span>
                         </div>
-                        <p class="text-[11px] text-slate-500 hidden sm:block">Pemanfaatan Material Sisa Jakarta</p>
+                        <p class="text-[11px] text-slate-500 hidden sm:block">Inovasi Platform Digital untuk Kolaborasi Pemanfaatan Material Sisa dan Kebutuhan Bahan Baku UMKM</p>
                     </div>
                 </a>
             </div>

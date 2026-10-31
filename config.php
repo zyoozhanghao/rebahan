@@ -48,6 +48,16 @@ try {
                 runDatabaseMigrationAndSeeding($pdo);
             }
         }
+    } else {
+        // Pastikan kolom B2B marketplace dan reason_notes ada di tabel
+        try {
+            $pdo->exec("ALTER TABLE `materials` ADD COLUMN IF NOT EXISTS `harga_per_satuan` DECIMAL(12,2) NOT NULL DEFAULT 0.00 AFTER `satuan`");
+            $pdo->exec("ALTER TABLE `materials` ADD COLUMN IF NOT EXISTS `satuan_jual` ENUM('kg', 'borongan') NOT NULL DEFAULT 'kg' AFTER `harga_per_satuan`");
+            $pdo->exec("ALTER TABLE `materials` ADD COLUMN IF NOT EXISTS `ukuran_pecahan` VARCHAR(100) NOT NULL DEFAULT '0.5m - 3m' AFTER `satuan_jual`");
+            $pdo->exec("ALTER TABLE `materials` ADD COLUMN IF NOT EXISTS `kelas_bahan` ENUM('Premium', 'Standar') NOT NULL DEFAULT 'Standar' AFTER `ukuran_pecahan`");
+            $pdo->exec("ALTER TABLE `materials` ADD COLUMN IF NOT EXISTS `jenis_motif` VARCHAR(150) NOT NULL DEFAULT 'Polos' AFTER `kelas_bahan`");
+            $pdo->exec("ALTER TABLE `transactions` ADD COLUMN IF NOT EXISTS `reason_notes` TEXT NULL AFTER `receiver_id`");
+        } catch (\Throwable $eCol) {}
     }
 } catch (\Throwable $t) {
     // Abaikan atau log error jika tabel sudah terdaftar

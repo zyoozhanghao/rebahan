@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pasang Penawaran Material Sisa - ReBahan</title>
+    <title>ReBahan: Inovasi Platform Digital untuk Kolaborasi Pemanfaatan Material Sisa dan Kebutuhan Bahan Baku UMKM</title>
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -26,10 +26,10 @@
                                     Re<span class="text-emerald-600">Bahan</span>
                                 </span>
                                 <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                    SIRKULAR UMKM
+                                    B2B SIRKULAR UMKM
                                 </span>
                             </div>
-                            <p class="text-[11px] text-slate-500 hidden sm:block">Pemanfaatan Material Sisa Jakarta</p>
+                            <p class="text-[11px] text-slate-500 hidden sm:block">Inovasi Platform Digital untuk Kolaborasi Pemanfaatan Material Sisa dan Kebutuhan Bahan Baku UMKM</p>
                         </div>
                     </a>
                 </div>
@@ -190,17 +190,62 @@
                             </div>
 
                             <div>
-                                <label for="jumlah" class="block text-xs font-bold text-slate-700 mb-1">Kuantitas / Jumlah <span class="text-rose-500">*</span></label>
+                                <label for="jumlah" class="block text-xs font-bold text-slate-700 mb-1">Kuantitas Stok <span class="text-rose-500">*</span></label>
                                 <input type="number" step="0.1" id="jumlah" required placeholder="Misal: 25.5" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
                             </div>
 
                             <div>
-                                <label for="satuan" class="block text-xs font-bold text-slate-700 mb-1">Satuan Ukuran <span class="text-rose-500">*</span></label>
+                                <label for="satuan" class="block text-xs font-bold text-slate-700 mb-1">Satuan Stok <span class="text-rose-500">*</span></label>
                                 <select id="satuan" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
                                     <option value="kg">Kilogram (kg)</option>
                                     <option value="meter">Meter (panjang)</option>
                                     <option value="pcs">Pcs / Buah / Lembar</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <!-- SPESIFIKASI B2B MARKETPLACE (Kelompok 2 Paper Specs) -->
+                        <div class="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-100 space-y-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs font-black uppercase text-emerald-800 tracking-wider">🏷️ Spesifikasi B2B Marketplace & Penawaran</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <!-- Harga per Satuan -->
+                                <div>
+                                    <label for="harga_per_satuan" class="block text-xs font-bold text-slate-700 mb-1">Harga per Satuan (Rp) <span class="text-rose-500">*</span></label>
+                                    <input type="number" step="500" id="harga_per_satuan" required value="60000" placeholder="Contoh: 60000" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                </div>
+
+                                <!-- Satuan Jual -->
+                                <div>
+                                    <label for="satuan_jual" class="block text-xs font-bold text-slate-700 mb-1">Satuan Jual <span class="text-rose-500">*</span></label>
+                                    <select id="satuan_jual" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                        <option value="kg">Per Kg (Timbangan)</option>
+                                        <option value="borongan">Borongan (Ambil Semua)</option>
+                                    </select>
+                                </div>
+
+                                <!-- Ukuran Pecahan -->
+                                <div>
+                                    <label for="ukuran_pecahan" class="block text-xs font-bold text-slate-700 mb-1">Ukuran Pecahan <span class="text-rose-500">*</span></label>
+                                    <input type="text" id="ukuran_pecahan" required value="0.5m - 3m" placeholder="Contoh: 0.5m - 3m" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                </div>
+
+                                <!-- Kelas Bahan -->
+                                <div>
+                                    <label for="kelas_bahan" class="block text-xs font-bold text-slate-700 mb-1">Kelas Bahan <span class="text-rose-500">*</span></label>
+                                    <select id="kelas_bahan" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                        <option value="Premium">Premium (Kondisi Prima)</option>
+                                        <option value="Standar">Standar (Layak Olah)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Jenis Motif / Corak -->
+                            <div>
+                                <label for="jenis_motif" class="block text-xs font-bold text-slate-700 mb-1">Jenis Motif / Corak & Spesifikasi Khusus</label>
+                                <input type="text" id="jenis_motif" placeholder="Contoh: Rayon Corak Bunga & Polos (estimasi ~6 meter/kg)" class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
                             </div>
                         </div>
 
@@ -322,10 +367,15 @@
             const kategori = document.getElementById('kategori').value;
             const jumlah = document.getElementById('jumlah').value.trim();
             const satuan = document.getElementById('satuan').value;
+            const harga_per_satuan = document.getElementById('harga_per_satuan').value.trim();
+            const satuan_jual = document.getElementById('satuan_jual').value;
+            const ukuran_pecahan = document.getElementById('ukuran_pecahan').value.trim();
+            const kelas_bahan = document.getElementById('kelas_bahan').value;
+            const jenis_motif = document.getElementById('jenis_motif').value.trim();
             const kondisi = document.getElementById('kondisi').value.trim();
             const deskripsi = document.getElementById('deskripsi').value.trim();
 
-            if (!nama_usaha || !kontak || !nama_bahan || !jumlah || !kondisi) {
+            if (!nama_usaha || !kontak || !nama_bahan || !jumlah || !kondisi || !harga_per_satuan) {
                 const alertEl = document.getElementById('form-error-alert');
                 alertEl.innerHTML = 'Mohon lengkapi semua kolom wajib yang bertanda bintang (*).';
                 alertEl.classList.remove('hidden');
@@ -342,6 +392,11 @@
                 kategori,
                 jumlah,
                 satuan,
+                harga_per_satuan,
+                satuan_jual,
+                ukuran_pecahan,
+                kelas_bahan,
+                jenis_motif,
                 kondisi,
                 deskripsi
             });

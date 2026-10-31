@@ -78,7 +78,7 @@ function getCategoryBadge($cat) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ReBahan - Platform Digital Ekonomi Sirkular UMKM Jakarta</title>
+    <title>ReBahan: Inovasi Platform Digital untuk Kolaborasi Pemanfaatan Material Sisa dan Kebutuhan Bahan Baku UMKM</title>
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -411,22 +411,49 @@ function getCategoryBadge($cat) {
                                     <span class="mr-1"><?= $catMeta['icon'] ?></span>
                                     <?= htmlspecialchars($mat['kategori']) ?>
                                 </span>
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">
-                                    Tersedia
-                                </span>
+                                <div class="flex items-center space-x-1">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold <?= ($mat['kelas_bahan'] ?? 'Standar') === 'Premium' ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-slate-100 text-slate-700 border border-slate-200' ?> uppercase">
+                                        <?= htmlspecialchars($mat['kelas_bahan'] ?? 'Standar') ?>
+                                    </span>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">
+                                        Tersedia
+                                    </span>
+                                </div>
                             </div>
 
                             <h3 class="text-base font-bold text-slate-900 group-hover:text-emerald-600 line-clamp-1 mb-1">
                                 <?= htmlspecialchars($mat['nama_bahan']) ?>
                             </h3>
 
-                            <div class="flex items-baseline space-x-1.5 my-2">
-                                <span class="text-2xl font-black text-emerald-600">
-                                    <?= (float)$mat['jumlah'] == (int)$mat['jumlah'] ? (int)$mat['jumlah'] : number_format($mat['jumlah'], 1) ?>
+                            <div class="flex items-baseline justify-between my-2">
+                                <div class="flex items-baseline space-x-1.5">
+                                    <span class="text-2xl font-black text-emerald-600">
+                                        <?= (float)$mat['jumlah'] == (int)$mat['jumlah'] ? (int)$mat['jumlah'] : number_format($mat['jumlah'], 1) ?>
+                                    </span>
+                                    <span class="text-sm font-bold text-slate-600 uppercase">
+                                        <?= htmlspecialchars($mat['satuan']) ?>
+                                    </span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-xs text-slate-400 block font-medium">Harga Penawaran:</span>
+                                    <span class="text-sm font-extrabold text-slate-800">Rp <?= number_format($mat['harga_per_satuan'] ?? 50000, 0, ',', '.') ?></span>
+                                    <span class="text-[10px] text-slate-500 font-semibold uppercase">/<?= htmlspecialchars($mat['satuan_jual'] ?? 'kg') ?></span>
+                                </div>
+                            </div>
+
+                            <!-- B2B Specs Badges -->
+                            <div class="flex flex-wrap gap-1.5 mb-2.5">
+                                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] font-semibold border border-slate-200" title="Ukuran Pecahan">
+                                    📏 <?= htmlspecialchars($mat['ukuran_pecahan'] ?? '0.5m - 3m') ?>
                                 </span>
-                                <span class="text-sm font-bold text-slate-600 uppercase">
-                                    <?= htmlspecialchars($mat['satuan']) ?>
+                                <span class="px-2 py-0.5 rounded bg-teal-50 text-teal-800 text-[10px] font-semibold border border-teal-200" title="Satuan Jual">
+                                    📦 Jual: <?= ($mat['satuan_jual'] ?? '') === 'borongan' ? 'Borongan' : 'Per Kg' ?>
                                 </span>
+                                <?php if (!empty($mat['jenis_motif'])): ?>
+                                    <span class="px-2 py-0.5 rounded bg-purple-50 text-purple-800 text-[10px] font-semibold border border-purple-200 truncate max-w-[170px]" title="Motif / Corak">
+                                        🎨 <?= htmlspecialchars($mat['jenis_motif']) ?>
+                                    </span>
+                                <?php endif; ?>
                             </div>
 
                             <p class="text-xs text-slate-500 line-clamp-2 mb-3">

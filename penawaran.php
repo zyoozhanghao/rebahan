@@ -6,16 +6,21 @@ require_once __DIR__ . '/config.php';
 
 $errors = [];
 $formData = [
-    'nama_usaha'   => '',
-    'sektor'       => 'Tekstil',
-    'kontak'       => '',
-    'wilayah'      => 'Jakarta Selatan',
-    'nama_bahan'   => '',
-    'kategori'     => 'Kain/Tekstil',
-    'jumlah'       => '',
-    'satuan'       => 'kg',
-    'kondisi'      => '',
-    'deskripsi'    => ''
+    'nama_usaha'        => '',
+    'sektor'            => 'Tekstil',
+    'kontak'            => '',
+    'wilayah'           => 'Jakarta Selatan',
+    'nama_bahan'        => '',
+    'kategori'          => 'Kain/Tekstil',
+    'jumlah'            => '',
+    'satuan'            => 'kg',
+    'harga_per_satuan'  => '60000',
+    'satuan_jual'       => 'kg',
+    'ukuran_pecahan'    => '0.5m - 3m',
+    'kelas_bahan'       => 'Premium',
+    'jenis_motif'       => '',
+    'kondisi'           => '',
+    'deskripsi'         => ''
 ];
 
 // Ambil daftar UMKM yang sudah terdaftar untuk autocomplete / dropdown opsional
@@ -27,19 +32,24 @@ try {
 // Pemrosesan Submit Form (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sanitasi input
-    $namaUsaha  = trim($_POST['nama_usaha'] ?? '');
-    $sektor     = trim($_POST['sektor'] ?? 'Tekstil');
-    $kontak     = trim($_POST['kontak'] ?? '');
-    $wilayah    = trim($_POST['wilayah'] ?? 'Jakarta Selatan');
-    $namaBahan  = trim($_POST['nama_bahan'] ?? '');
-    $kategori   = trim($_POST['kategori'] ?? 'Kain/Tekstil');
-    $jumlah     = trim($_POST['jumlah'] ?? '');
-    $satuan     = trim($_POST['satuan'] ?? 'kg');
-    $kondisi    = trim($_POST['kondisi'] ?? '');
-    $deskripsi  = trim($_POST['deskripsi'] ?? '');
+    $namaUsaha       = trim($_POST['nama_usaha'] ?? '');
+    $sektor          = trim($_POST['sektor'] ?? 'Tekstil');
+    $kontak          = trim($_POST['kontak'] ?? '');
+    $wilayah         = trim($_POST['wilayah'] ?? 'Jakarta Selatan');
+    $namaBahan       = trim($_POST['nama_bahan'] ?? '');
+    $kategori        = trim($_POST['kategori'] ?? 'Kain/Tekstil');
+    $jumlah          = trim($_POST['jumlah'] ?? '');
+    $satuan          = trim($_POST['satuan'] ?? 'kg');
+    $hargaPerSatuan  = trim($_POST['harga_per_satuan'] ?? '0');
+    $satuanJual      = trim($_POST['satuan_jual'] ?? 'kg');
+    $ukuranPecahan   = trim($_POST['ukuran_pecahan'] ?? '0.5m - 3m');
+    $kelasBahan      = trim($_POST['kelas_bahan'] ?? 'Standar');
+    $jenisMotif      = trim($_POST['jenis_motif'] ?? '');
+    $kondisi         = trim($_POST['kondisi'] ?? '');
+    $deskripsi       = trim($_POST['deskripsi'] ?? '');
 
     // Simpan kembali data untuk form refill bila ada error
-    $formData = compact('namaUsaha', 'sektor', 'kontak', 'wilayah', 'namaBahan', 'kategori', 'jumlah', 'satuan', 'kondisi', 'deskripsi');
+    $formData = compact('namaUsaha', 'sektor', 'kontak', 'wilayah', 'namaBahan', 'kategori', 'jumlah', 'satuan', 'hargaPerSatuan', 'satuanJual', 'ukuranPecahan', 'kelasBahan', 'jenisMotif', 'kondisi', 'deskripsi');
 
     // Validasi
     if (empty($namaUsaha)) {
@@ -53,6 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     if (!is_numeric($jumlah) || (float)$jumlah <= 0) {
         $errors[] = "Jumlah kuantitas harus berupa angka lebih dari 0.";
+    }
+    if (!is_numeric($hargaPerSatuan) || (float)$hargaPerSatuan < 0) {
+        $errors[] = "Harga per satuan harus berupa angka nominal yang valid.";
     }
     if (empty($kondisi)) {
         $errors[] = "Kondisi material wajib dijelaskan (contoh: Bersih, Sisa rol potongan, dll).";
@@ -82,11 +95,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmtUpdateUser->execute([$kontak, $wilayah, $userId]);
             }
 
-            // 2. Insert ke tabel materials
+            // 2. Insert ke tabel materials dengan atribut B2B marketplace
             $stmtInsertMat = $pdo->prepare("
                 INSERT INTO materials 
-                (user_id, nama_bahan, kategori, jumlah, satuan, kondisi, wilayah, deskripsi, status) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'available')
+                (user_id, nama_bahan, kategori, jumlah, satuan, harga_per_satuan, satuan_jual, ukuran_pecahan, kelas_bahan, jenis_motif, kondisi, wilayah, deskripsi, status) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'available')
             ");
             $stmtInsertMat->execute([
                 $userId,
@@ -94,6 +107,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $kategori,
                 (float) $jumlah,
                 $satuan,
+                (float) $hargaPerSatuan,
+                $satuanJual,
+                $ukuranPecahan,
+                $kelasBahan,
+                $jenisMotif,
                 $kondisi,
                 $wilayah,
                 $deskripsi
@@ -120,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pasang Penawaran Material Sisa - ReBahan</title>
+    <title>ReBahan: Inovasi Platform Digital untuk Kolaborasi Pemanfaatan Material Sisa dan Kebutuhan Bahan Baku UMKM</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased flex flex-col min-h-screen">
@@ -274,21 +292,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <!-- Kuantitas -->
                             <div>
-                                <label for="jumlah" class="block text-xs font-bold text-slate-700 mb-1">Kuantitas / Jumlah <span class="text-rose-500">*</span></label>
+                                <label for="jumlah" class="block text-xs font-bold text-slate-700 mb-1">Kuantitas Stok <span class="text-rose-500">*</span></label>
                                 <input type="number" step="0.1" id="jumlah" name="jumlah" required 
                                        value="<?= htmlspecialchars($formData['jumlah'] ?? '') ?>" 
                                        placeholder="Misal: 25.5" 
                                        class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent">
                             </div>
 
-                            <!-- Satuan -->
+                            <!-- Satuan Stok -->
                             <div>
-                                <label for="satuan" class="block text-xs font-bold text-slate-700 mb-1">Satuan Ukuran <span class="text-rose-500">*</span></label>
+                                <label for="satuan" class="block text-xs font-bold text-slate-700 mb-1">Satuan Stok <span class="text-rose-500">*</span></label>
                                 <select id="satuan" name="satuan" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
                                     <option value="kg" <?= ($formData['satuan'] ?? '') === 'kg' ? 'selected' : '' ?>>Kilogram (kg)</option>
                                     <option value="meter" <?= ($formData['satuan'] ?? '') === 'meter' ? 'selected' : '' ?>>Meter (panjang)</option>
                                     <option value="pcs" <?= ($formData['satuan'] ?? '') === 'pcs' ? 'selected' : '' ?>>Pcs / Buah / Lembar</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <!-- SPESIFIKASI B2B MARKETPLACE (Kelompok 2 Paper Specs) -->
+                        <div class="p-4 bg-emerald-50/60 rounded-2xl border border-emerald-100 space-y-4">
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs font-black uppercase text-emerald-800 tracking-wider">🏷️ Spesifikasi B2B Marketplace & Penawaran</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <!-- Harga per Satuan -->
+                                <div>
+                                    <label for="harga_per_satuan" class="block text-xs font-bold text-slate-700 mb-1">Harga per Satuan (Rp) <span class="text-rose-500">*</span></label>
+                                    <input type="number" step="500" id="harga_per_satuan" name="harga_per_satuan" required 
+                                           value="<?= htmlspecialchars($formData['hargaPerSatuan'] ?? $formData['harga_per_satuan'] ?? '60000') ?>" 
+                                           placeholder="Contoh: 60000" 
+                                           class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                </div>
+
+                                <!-- Satuan Jual -->
+                                <div>
+                                    <label for="satuan_jual" class="block text-xs font-bold text-slate-700 mb-1">Satuan Jual <span class="text-rose-500">*</span></label>
+                                    <select id="satuan_jual" name="satuan_jual" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                        <option value="kg" <?= ($formData['satuanJual'] ?? $formData['satuan_jual'] ?? '') === 'kg' ? 'selected' : '' ?>>Per Kg (Timbangan)</option>
+                                        <option value="borongan" <?= ($formData['satuanJual'] ?? $formData['satuan_jual'] ?? '') === 'borongan' ? 'selected' : '' ?>>Borongan (Ambil Semua)</option>
+                                    </select>
+                                </div>
+
+                                <!-- Ukuran Pecahan -->
+                                <div>
+                                    <label for="ukuran_pecahan" class="block text-xs font-bold text-slate-700 mb-1">Ukuran Pecahan <span class="text-rose-500">*</span></label>
+                                    <input type="text" id="ukuran_pecahan" name="ukuran_pecahan" required 
+                                           value="<?= htmlspecialchars($formData['ukuranPecahan'] ?? $formData['ukuran_pecahan'] ?? '0.5m - 3m') ?>" 
+                                           placeholder="Contoh: 0.5m - 3m" 
+                                           class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                </div>
+
+                                <!-- Kelas Bahan -->
+                                <div>
+                                    <label for="kelas_bahan" class="block text-xs font-bold text-slate-700 mb-1">Kelas Bahan <span class="text-rose-500">*</span></label>
+                                    <select id="kelas_bahan" name="kelas_bahan" required class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                                        <option value="Premium" <?= ($formData['kelasBahan'] ?? $formData['kelas_bahan'] ?? '') === 'Premium' ? 'selected' : '' ?>>Premium (Kondisi Prima)</option>
+                                        <option value="Standar" <?= ($formData['kelasBahan'] ?? $formData['kelas_bahan'] ?? '') === 'Standar' ? 'selected' : '' ?>>Standar (Layak Olah)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Jenis Motif / Corak -->
+                            <div>
+                                <label for="jenis_motif" class="block text-xs font-bold text-slate-700 mb-1">Jenis Motif / Corak & Spesifikasi Khusus</label>
+                                <input type="text" id="jenis_motif" name="jenis_motif" 
+                                       value="<?= htmlspecialchars($formData['jenisMotif'] ?? $formData['jenis_motif'] ?? '') ?>" 
+                                       placeholder="Contoh: Rayon Corak Bunga & Polos (estimasi ~6 meter/kg)" 
+                                       class="w-full px-3.5 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
                             </div>
                         </div>
 
