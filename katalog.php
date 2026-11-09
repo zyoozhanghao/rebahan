@@ -8,12 +8,30 @@ require_once __DIR__ . '/config.php';
 $search = trim($_GET['q'] ?? '');
 $filterKategori = trim($_GET['kategori'] ?? '');
 $filterWilayah = trim($_GET['wilayah'] ?? '');
+$filterStatus = trim($_GET['status'] ?? 'all');
 $successMsg = '';
 $errorMsg = '';
 
 // Cek notifikasi redirect dari penawaran.php atau proses transaksi
 if (isset($_GET['added'])) {
     $successMsg = "Material sisa Anda berhasil didaftarkan ke katalog ReBahan! Menunggu UMKM yang membutuhkan.";
+}
+
+// Tangani perubahan status transaksi (POST)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'update_status') {
+    $trxId = (int) ($_POST['trx_id'] ?? 0);
+    $newStatus = trim($_POST['status'] ?? '');
+    $validStatuses = ['Pending', 'Disetujui', 'Dalam Pengambilan', 'Selesai'];
+
+    if ($trxId > 0 && in_array($newStatus, $validStatuses)) {
+        try {
+            $stmtUpdate = $pdo->prepare("UPDATE transactions SET status = ? WHERE id = ?");
+            $stmtUpdate->execute([$newStatus, $trxId]);
+            $successMsg = "Status transaksi #TRX-" . str_pad($trxId, 3, '0', STR_PAD_LEFT) . " berhasil diubah menjadi '{$newStatus}'.";
+        } catch (\PDOException $e) {
+            $errorMsg = "Gagal memperbarui status transaksi: " . $e->getMessage();
+        }
+    }
 }
 
 // Tangani form "Ajukan Pengambilan" (POST)
@@ -65,6 +83,37 @@ try {
     $allUsers = $pdo->query("SELECT id, nama_usaha, wilayah FROM users ORDER BY nama_usaha ASC")->fetchAll();
 } catch (\Throwable $e) {}
 
+// Ambil Seluruh Aktivitas Transaksi & Penawaran Real-time
+$allTransactions = [];
+try {
+    $stmtTrx = $pdo->query("
+        SELECT t.*, 
+               m.nama_bahan, m.kategori, m.jumlah, m.satuan, m.wilayah AS material_wilayah, m.harga_per_satuan, m.satuan_jual,
+               u_penyedia.nama_usaha AS penyedia_nama, u_penyedia.kontak AS penyedia_kontak,
+               u_pengambil.nama_usaha AS pengambil_nama, u_pengambil.wilayah AS pengambil_wilayah, u_pengambil.kontak AS pengambil_kontak
+        FROM transactions t
+        JOIN materials m ON t.material_id = m.id
+        JOIN users u_penyedia ON m.user_id = u_penyedia.id
+        JOIN users u_pengambil ON t.receiver_id = u_pengambil.id
+        ORDER BY t.created_at DESC
+    ");
+    $allTransactions = $stmtTrx->fetchAll();
+} catch (\Throwable $e) {}
+
+// Pemetaan Penawar Aktif per Material
+$activeBidsMap = [];
+$biddersMap = [];
+foreach ($allTransactions as $t) {
+    $mid = (int) $t['material_id'];
+    if (!isset($biddersMap[$mid])) $biddersMap[$mid] = [];
+    if (!in_array($t['pengambil_nama'], $biddersMap[$mid])) {
+        $biddersMap[$mid][] = $t['pengambil_nama'];
+    }
+    if (in_array($t['status'], ['Pending', 'Disetujui', 'Dalam Pengambilan'])) {
+        $activeBidsMap[$mid] = ($activeBidsMap[$mid] ?? 0) + 1;
+    }
+}
+
 // Query Filter Material
 $query = "
     SELECT m.*, u.nama_usaha, u.kontak, u.sektor
@@ -92,16 +141,51 @@ if ($filterWilayah !== '') {
     $params[] = $filterWilayah;
 }
 
-$query .= " ORDER BY (m.status = 'available') DESC, m.created_at DESC";
-
 try {
     $stmt = $pdo->prepare($query);
     $stmt->execute($params);
-    $materials = $stmt->fetchAll();
+    $rawMaterials = $stmt->fetchAll();
 } catch (\PDOException $e) {
-    $materials = [];
+    $rawMaterials = [];
     $errorMsg = "Gagal memuat katalog: " . $e->getMessage();
 }
+
+// Hitung Counter Status Pasokan
+$countAll = count($rawMaterials);
+$countBidding = 0;
+$countAvailable = 0;
+foreach ($rawMaterials as $m) {
+    $mid = (int) $m['id'];
+    if (($activeBidsMap[$mid] ?? 0) > 0 || $m['status'] === 'booked') {
+        $countBidding++;
+    }
+    if ($m['status'] === 'available' && !isset($activeBidsMap[$mid])) {
+        $countAvailable++;
+    }
+}
+
+// Filter sesuai badge status pasokan
+$materials = $rawMaterials;
+if ($filterStatus === 'bidding') {
+    $materials = array_filter($materials, function($m) use ($activeBidsMap) {
+        $mid = (int) $m['id'];
+        return ($activeBidsMap[$mid] ?? 0) > 0 || $m['status'] === 'booked';
+    });
+} elseif ($filterStatus === 'available') {
+    $materials = array_filter($materials, function($m) {
+        return $m['status'] === 'available';
+    });
+}
+
+// Smart Sorting: Material dengan penawaran aktif & listing terbaru diletakkan di atas!
+usort($materials, function($a, $b) use ($activeBidsMap) {
+    $bidsA = $activeBidsMap[(int)$a['id']] ?? 0;
+    $bidsB = $activeBidsMap[(int)$b['id']] ?? 0;
+    if ($bidsA !== $bidsB) {
+        return $bidsB <=> $bidsA; // Prioritas tawaran aktif!
+    }
+    return strtotime($b['created_at']) <=> strtotime($a['created_at']);
+});
 
 // Helper badge dan icon kategori
 function getCategoryMeta($kategori) {
@@ -111,6 +195,17 @@ function getCategoryMeta($kategori) {
         'Plastik'       => ['bg' => 'bg-cyan-50', 'text' => 'text-cyan-700', 'border' => 'border-cyan-200', 'icon' => '♻️', 'color' => 'cyan'],
         'Kayu/Bambu'    => ['bg' => 'bg-emerald-50', 'text' => 'text-emerald-700', 'border' => 'border-emerald-200', 'icon' => '🪵', 'color' => 'emerald'],
         default         => ['bg' => 'bg-slate-50', 'text' => 'text-slate-700', 'border' => 'border-slate-200', 'icon' => '✨', 'color' => 'slate']
+    };
+}
+
+// Helper status transaksi
+function getTrxStatusBadge($status) {
+    return match($status) {
+        'Pending'           => ['bg' => 'bg-amber-50', 'text' => 'text-amber-700', 'border' => 'border-amber-200', 'dot' => 'bg-amber-500'],
+        'Disetujui'         => ['bg' => 'bg-blue-50', 'text' => 'text-blue-700', 'border' => 'border-blue-200', 'dot' => 'bg-blue-500'],
+        'Dalam Pengambilan' => ['bg' => 'bg-purple-50', 'text' => 'text-purple-700', 'border' => 'border-purple-200', 'dot' => 'bg-purple-500'],
+        'Selesai'           => ['bg' => 'bg-emerald-50', 'text' => 'text-emerald-700', 'border' => 'border-emerald-200', 'dot' => 'bg-emerald-500'],
+        default             => ['bg' => 'bg-slate-50', 'text' => 'text-slate-700', 'border' => 'border-slate-200', 'dot' => 'bg-slate-400']
     };
 }
 ?>
@@ -238,6 +333,20 @@ function getCategoryMeta($kategori) {
             </form>
         </div>
 
+        <!-- STATUS TRACKING QUICK BADGES -->
+        <div class="flex items-center space-x-2 mb-6 overflow-x-auto pb-1 text-xs">
+            <span class="text-slate-400 font-bold uppercase tracking-wider text-[11px] mr-1 flex-shrink-0">Status Pasokan:</span>
+            <a href="katalog.php?<?= http_build_query(array_merge($_GET, ['status' => 'all'])) ?>" class="px-3.5 py-1.5 rounded-xl font-bold <?= $filterStatus === 'all' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white text-slate-700 border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/60' ?> transition flex-shrink-0">
+                Semua (<?= $countAll ?>)
+            </a>
+            <a href="katalog.php?<?= http_build_query(array_merge($_GET, ['status' => 'bidding'])) ?>" class="px-3.5 py-1.5 rounded-xl font-semibold <?= $filterStatus === 'bidding' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white text-slate-700 border border-slate-200 hover:border-amber-300 hover:bg-amber-50/60' ?> transition flex-shrink-0">
+                🔥 Sedang Ditawar (<?= $countBidding ?>)
+            </a>
+            <a href="katalog.php?<?= http_build_query(array_merge($_GET, ['status' => 'available'])) ?>" class="px-3.5 py-1.5 rounded-xl font-semibold <?= $filterStatus === 'available' ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white text-slate-700 border border-slate-200 hover:border-emerald-300 hover:bg-emerald-50/60' ?> transition flex-shrink-0">
+                ✅ Siap Ambil / Tersedia (<?= $countAvailable ?>)
+            </a>
+        </div>
+
         <!-- Material Counter Banner -->
         <div class="flex items-center justify-between mb-6 text-sm text-slate-500">
             <div>
@@ -247,6 +356,11 @@ function getCategoryMeta($kategori) {
                 <?php endif; ?>
                 <?php if ($filterWilayah): ?>
                     di wilayah <span class="font-semibold text-emerald-600"><?= htmlspecialchars($filterWilayah) ?></span>
+                <?php endif; ?>
+                <?php if ($filterStatus === 'bidding'): ?>
+                    dengan <span class="font-semibold text-amber-600">penawaran aktif</span>
+                <?php elseif ($filterStatus === 'available'): ?>
+                    yang <span class="font-semibold text-emerald-600">siap ambil</span>
                 <?php endif; ?>
             </div>
             <div class="text-xs">
@@ -274,8 +388,14 @@ function getCategoryMeta($kategori) {
                 </div>
             </div>
         <?php else: ?>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <?php foreach ($materials as $mat): 
+            <div id="php-materials-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <?php 
+                $cardIdx = 0;
+                foreach ($materials as $mat): 
+                    $cardIdx++;
+                    $mid = (int) $mat['id'];
+                    $bidsCount = $activeBidsMap[$mid] ?? 0;
+                    $bidders = $biddersMap[$mid] ?? [];
                     $catMeta = getCategoryMeta($mat['kategori']);
                     $isAvailable = ($mat['status'] === 'available');
                     $isPremium = (($mat['kelas_bahan'] ?? 'Standar') === 'Premium');
@@ -285,8 +405,9 @@ function getCategoryMeta($kategori) {
                     $ukuranPecahan = $mat['ukuran_pecahan'] ?? '0.5m - 3m';
                     $kelasBahan = $mat['kelas_bahan'] ?? 'Standar';
                     $jenisMotif = $mat['jenis_motif'] ?? '';
+                    $isHidden = ($cardIdx > 6);
                 ?>
-                    <div id="mat-<?= $mat['id'] ?>" class="bg-white rounded-2xl border <?= $isAvailable ? 'border-slate-200 hover:border-emerald-300' : 'border-slate-200 bg-slate-50/70 opacity-80' ?> overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 flex flex-col group">
+                    <div id="mat-<?= $mat['id'] ?>" class="php-feed-card <?= $isHidden ? 'hidden' : '' ?> bg-white rounded-2xl border <?= $isAvailable ? 'border-slate-200 hover:border-emerald-300' : 'border-slate-200 bg-slate-50/70 opacity-80' ?> overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 flex flex-col group">
                         
                         <!-- Card Header & Badge -->
                         <div class="p-5 flex-1">
@@ -296,7 +417,12 @@ function getCategoryMeta($kategori) {
                                     <?= htmlspecialchars($mat['kategori']) ?>
                                 </span>
 
-                                <div class="flex items-center space-x-1 flex-shrink-0">
+                                <div class="flex items-center space-x-1 flex-shrink-0 flex-wrap justify-end gap-1">
+                                    <?php if ($bidsCount > 0): ?>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-black bg-rose-50 text-rose-700 border border-rose-200 animate-pulse">
+                                            🔥 <?= $bidsCount ?> Penawar
+                                        </span>
+                                    <?php endif; ?>
                                     <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold <?= $isPremium ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-slate-100 text-slate-700 border border-slate-200' ?> uppercase">
                                         <?= htmlspecialchars($kelasBahan) ?>
                                     </span>
@@ -352,6 +478,16 @@ function getCategoryMeta($kategori) {
                                     </span>
                                 <?php endif; ?>
                             </div>
+
+                            <!-- Live Penawar Info (Jika Ada) -->
+                            <?php if (!empty($bidders)): ?>
+                                <div class="mb-2 py-1 px-2.5 rounded-lg bg-amber-50/70 border border-amber-200/70 text-[11px] text-amber-900 flex items-center justify-between">
+                                    <span class="font-medium truncate mr-1">
+                                        👥 <strong class="font-bold">Penawar:</strong> <?= htmlspecialchars(implode(', ', array_slice($bidders, 0, 2))) ?><?= count($bidders) > 2 ? ' +' . (count($bidders) - 2) : '' ?>
+                                    </span>
+                                    <span class="text-[10px] font-bold text-amber-700 flex-shrink-0">Aktif</span>
+                                </div>
+                            <?php endif; ?>
 
                             <!-- Kondisi Bahan -->
                             <div class="mb-2">
@@ -419,7 +555,142 @@ function getCategoryMeta($kategori) {
                     </div>
                 <?php endforeach; ?>
             </div>
+
+            <!-- INFINITE FEED / LOAD MORE BUTTON -->
+            <?php if (count($materials) > 6): ?>
+                <div id="php-load-more-container" class="mt-10 mb-14 text-center">
+                    <button type="button" id="php-load-more-btn" onclick="loadMorePhpMaterials()" class="inline-flex items-center px-6 py-3 rounded-2xl bg-white border border-slate-300 hover:border-emerald-500 text-slate-800 hover:text-emerald-700 font-bold text-sm shadow-xs hover:shadow-md transition duration-200 group">
+                        <svg class="w-4 h-4 mr-2 text-emerald-600 group-hover:translate-y-0.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                        <span>Muat Lebih Banyak Material</span>
+                    </button>
+                </div>
+            <?php endif; ?>
+
         <?php endif; ?>
+
+        <!-- ========================================================================= -->
+        <!-- TABEL AKTIVITAS PENAWARAN & TRANSAKSI REAL-TIME -->
+        <!-- ========================================================================= -->
+        <section class="mt-16 bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-100">
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-200">
+                            🔴 Live Transaksi Sirkular
+                        </span>
+                        <span class="text-xs text-slate-400">• Jakarta Real-time Exchange</span>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900 mt-1 flex items-center">
+                        <span class="mr-2 text-2xl">⚡</span>
+                        Tabel Aktivitas Penawaran & Transaksi Real-time
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-0.5">
+                        Monitoring transparan aktivitas penawaran, calon mitra pengambil, dan pergerakan material sisa UMKM.
+                    </p>
+                </div>
+                <div class="text-xs text-slate-600 bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 font-medium">
+                    Total: <strong class="text-slate-900 font-bold"><?= count($allTransactions) ?></strong> Aktivitas Tercatat
+                </div>
+            </div>
+
+            <!-- Responsive Table Wrapper -->
+            <div class="overflow-x-auto -mx-6 sm:mx-0 px-6 sm:px-0">
+                <table class="w-full text-left border-collapse text-xs min-w-[850px]">
+                    <thead>
+                        <tr class="bg-slate-50 text-slate-500 border-b border-slate-200 uppercase tracking-wider font-semibold">
+                            <th class="py-3 px-4">ID & Tanggal</th>
+                            <th class="py-3 px-4">Material & Kuantitas</th>
+                            <th class="py-3 px-4">Penyedia Material</th>
+                            <th class="py-3 px-4">Penawar / Pengambil</th>
+                            <th class="py-3 px-4">Rencana Pemanfaatan</th>
+                            <th class="py-3 px-4">Status Tawaran</th>
+                            <th class="py-3 px-4 text-right">Ubah Status</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <?php if (empty($allTransactions)): ?>
+                            <tr>
+                                <td colspan="7" class="py-8 text-center text-slate-400">
+                                    Belum ada transaksi kolaborasi material sisa tercatat.
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($allTransactions as $trx): 
+                                $badge = getTrxStatusBadge($trx['status']);
+                                $qtyFormatted = (float)$trx['jumlah'] == (int)$trx['jumlah'] ? (int)$trx['jumlah'] : number_format($trx['jumlah'], 1);
+                            ?>
+                                <tr class="hover:bg-slate-50/60 transition">
+                                    <!-- ID & Tanggal -->
+                                    <td class="py-3.5 px-4 font-mono text-[11px] text-slate-500">
+                                        <div class="font-bold text-slate-800">#TRX-<?= str_pad($trx['id'], 3, '0', STR_PAD_LEFT) ?></div>
+                                        <div class="text-[10px] text-slate-400"><?= date('d M Y, H:i', strtotime($trx['created_at'])) ?></div>
+                                    </td>
+
+                                    <!-- Material & Kuantitas -->
+                                    <td class="py-3.5 px-4">
+                                        <div class="font-bold text-slate-900 flex items-center">
+                                            <?= htmlspecialchars($trx['nama_bahan']) ?>
+                                        </div>
+                                        <div class="text-[11px] text-emerald-700 font-semibold mt-0.5">
+                                            <?= $qtyFormatted ?> <?= htmlspecialchars($trx['satuan']) ?> 
+                                            <span class="text-slate-400 font-normal">• <?= htmlspecialchars($trx['kategori']) ?></span>
+                                        </div>
+                                    </td>
+
+                                    <!-- Penyedia -->
+                                    <td class="py-3.5 px-4">
+                                        <div class="font-semibold text-slate-800"><?= htmlspecialchars($trx['penyedia_nama']) ?></div>
+                                        <div class="text-[10px] text-slate-400 flex items-center mt-0.5">
+                                            📍 <?= htmlspecialchars($trx['penyedia_wilayah']) ?>
+                                        </div>
+                                    </td>
+
+                                    <!-- Penawar / Pengambil -->
+                                    <td class="py-3.5 px-4">
+                                        <div class="font-bold text-emerald-800"><?= htmlspecialchars($trx['pengambil_nama']) ?></div>
+                                        <div class="text-[10px] text-slate-400 mt-0.5">
+                                            📍 <?= htmlspecialchars($trx['pengambil_wilayah']) ?>
+                                        </div>
+                                    </td>
+
+                                    <!-- Alasan Pengambilan -->
+                                    <td class="py-3.5 px-4 max-w-xs">
+                                        <div class="text-slate-600 line-clamp-2 text-[11px] bg-slate-50 p-2 rounded-lg border border-slate-100" title="<?= htmlspecialchars($trx['reason_notes'] ?? '-') ?>">
+                                            <?= htmlspecialchars($trx['reason_notes'] ?? 'Pengambilan material sisa untuk kebutuhan produksi produk turunan UMKM.') ?>
+                                        </div>
+                                    </td>
+
+                                    <!-- Status Tawaran -->
+                                    <td class="py-3.5 px-4">
+                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold <?= $badge['bg'] ?> <?= $badge['text'] ?> border <?= $badge['border'] ?>">
+                                            <span class="w-1.5 h-1.5 rounded-full <?= $badge['dot'] ?> mr-1.5 animate-pulse"></span>
+                                            <?= htmlspecialchars($trx['status']) ?>
+                                        </span>
+                                    </td>
+
+                                    <!-- Action Ubah Status -->
+                                    <td class="py-3.5 px-4 text-right">
+                                        <form method="POST" action="katalog.php" class="inline-flex items-center space-x-1">
+                                            <input type="hidden" name="action" value="update_status">
+                                            <input type="hidden" name="transaction_id" value="<?= $trx['id'] ?>">
+                                            
+                                            <select name="status" onchange="this.form.submit()" class="text-[11px] font-semibold py-1 px-2 rounded-lg border border-slate-300 bg-white hover:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500">
+                                                <option value="Pending" <?= $trx['status'] === 'Pending' ? 'selected' : '' ?>>Pending</option>
+                                                <option value="Disetujui" <?= $trx['status'] === 'Disetujui' ? 'selected' : '' ?>>Disetujui</option>
+                                                <option value="Dalam Pengambilan" <?= $trx['status'] === 'Dalam Pengambilan' ? 'selected' : '' ?>>Diambil</option>
+                                                <option value="Selesai" <?= $trx['status'] === 'Selesai' ? 'selected' : '' ?>>Selesai</option>
+                                            </select>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
     </main>
 
@@ -556,6 +827,25 @@ function getCategoryMeta($kategori) {
                 el.classList.remove('hidden');
             } else {
                 el.classList.add('hidden');
+            }
+        }
+
+        // Infinite Feed / Load More for PHP cards
+        let currentPhpDisplayCount = 6;
+        function loadMorePhpMaterials() {
+            currentPhpDisplayCount += 6;
+            const hiddenCards = document.querySelectorAll('.php-feed-card.hidden');
+            let revealed = 0;
+            hiddenCards.forEach((card, index) => {
+                if (index < 6) {
+                    card.classList.remove('hidden');
+                    revealed++;
+                }
+            });
+            const remaining = document.querySelectorAll('.php-feed-card.hidden').length;
+            if (remaining === 0) {
+                const btnContainer = document.getElementById('php-load-more-container');
+                if (btnContainer) btnContainer.classList.add('hidden');
             }
         }
 

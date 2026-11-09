@@ -8,22 +8,17 @@ $navLinks = [
     [
         'label' => 'Dashboard & Impact',
         'href'  => 'index.php',
-        'icon'  => '<svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>'
+        'icon'  => '<svg class="w-4 h-4 mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>'
     ],
     [
         'label' => 'Katalog Material',
         'href'  => 'katalog.php',
-        'icon'  => '<svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>'
-    ],
-    [
-        'label' => 'Pasang Penawaran',
-        'href'  => 'penawaran.php',
-        'icon'  => '<svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+        'icon'  => '<svg class="w-4 h-4 mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>'
     ],
     [
         'label' => 'Smart Matching',
         'href'  => 'matching.php',
-        'icon'  => '<svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>'
+        'icon'  => '<svg class="w-4 h-4 mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>'
     ],
 ];
 ?>
@@ -33,8 +28,8 @@ $navLinks = [
         <div class="flex items-center justify-between h-20">
             <!-- Brand Logo & Tagline -->
             <div class="flex items-center space-x-3">
-                <a href="index.php" class="flex items-center space-x-3 group">
-                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-200">
+                <a href="index.php" class="flex items-center space-x-3 group flex-shrink-0">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-200 flex-shrink-0">
                         <!-- Recycle / Circular Economy Leaf SVG -->
                         <svg class="w-6 h-6 animate-[spin_10s_linear_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
@@ -60,11 +55,11 @@ $navLinks = [
                     $isActive = ($currentPage === $nav['href']);
                 ?>
                     <a href="<?= $nav['href'] ?>" 
-                       class="flex items-center px-3.5 py-2 rounded-xl text-sm font-medium transition-all duration-150 <?= $isActive 
+                       class="flex items-center px-3.5 py-2 rounded-xl text-sm font-medium whitespace-nowrap flex-shrink-0 transition-all duration-150 <?= $isActive 
                             ? 'bg-emerald-50 text-emerald-700 font-semibold shadow-xs' 
                             : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' ?>">
                         <?= $nav['icon'] ?>
-                        <?= htmlspecialchars($nav['label']) ?>
+                        <span class="whitespace-nowrap"><?= htmlspecialchars($nav['label']) ?></span>
                     </a>
                 <?php endforeach; ?>
             </div>
@@ -72,11 +67,11 @@ $navLinks = [
             <!-- Action CTA Button -->
             <div class="hidden md:flex items-center space-x-3">
                 <a href="penawaran.php" 
-                   class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 shadow-sm shadow-emerald-600/30 transition-all duration-150 transform hover:-translate-y-0.5">
-                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-xl text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 shadow-sm shadow-emerald-600/30 whitespace-nowrap flex-shrink-0 transition-all duration-150 transform hover:-translate-y-0.5">
+                    <svg class="w-4 h-4 mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
-                    Pasang Bahan
+                    <span>+ Pasang Bahan</span>
                 </a>
             </div>
 
