@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Katalog Material Sisa - ReBahan</title>
+    <title>ReBahan: Inovasi Platform Digital untuk Kolaborasi Pemanfaatan Material Sisa dan Kebutuhan Bahan Baku UMKM - Katalog</title>
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -25,11 +25,11 @@
                                 <span class="text-2xl font-black tracking-tight text-slate-800">
                                     Re<span class="text-emerald-600">Bahan</span>
                                 </span>
-                                <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                    SIRKULAR UMKM
+                                <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 tracking-wide uppercase">
+                                    B2B SIRKULAR UMKM
                                 </span>
                             </div>
-                            <p class="text-[11px] text-slate-500 hidden sm:block">Pemanfaatan Material Sisa Jakarta</p>
+                            <p class="text-[11px] text-slate-500 hidden lg:block truncate max-w-xs xl:max-w-md">Inovasi Kolaborasi Material Sisa & Bahan Baku UMKM Jakarta</p>
                         </div>
                     </a>
                 </div>
@@ -121,7 +121,7 @@
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs mb-8">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4">
                 <!-- Search Keyword -->
-                <div class="lg:col-span-5">
+                <div class="sm:col-span-2 lg:col-span-5">
                     <label for="search-input" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Cari Bahan / UMKM</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
@@ -136,7 +136,7 @@
                 </div>
 
                 <!-- Filter Kategori -->
-                <div class="lg:col-span-3">
+                <div class="sm:col-span-1 lg:col-span-3">
                     <label for="filter-kategori" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kategori Material</label>
                     <select id="filter-kategori" onchange="applyFilters()" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white">
                         <option value="">Semua Kategori</option>
@@ -148,7 +148,7 @@
                 </div>
 
                 <!-- Filter Wilayah Jakarta -->
-                <div class="lg:col-span-3">
+                <div class="sm:col-span-1 lg:col-span-3">
                     <label for="filter-wilayah" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Wilayah Jakarta</label>
                     <select id="filter-wilayah" onchange="applyFilters()" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white">
                         <option value="">Semua Wilayah</option>
@@ -161,11 +161,12 @@
                 </div>
 
                 <!-- Reset Filter Button -->
-                <div class="lg:col-span-1 flex items-end">
-                    <button type="button" onclick="resetFilters()" class="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition flex items-center justify-center" title="Reset Filter">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="sm:col-span-2 lg:col-span-1 flex items-end">
+                    <button type="button" onclick="resetFilters()" class="w-full py-2 px-3 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-600 font-semibold text-xs rounded-xl transition flex items-center justify-center space-x-1" title="Reset Filter">
+                        <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                         </svg>
+                        <span class="inline lg:hidden">Reset Filter</span>
                     </button>
                 </div>
             </div>
@@ -211,21 +212,25 @@
             </div>
 
             <!-- Material Summary Box -->
-            <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-4 mb-5 text-xs text-slate-700 space-y-1.5">
-                <div class="flex justify-between">
+            <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-4 mb-5 text-xs text-slate-700 space-y-2">
+                <div class="flex justify-between items-center">
                     <span class="text-slate-500">Material:</span>
-                    <strong id="modalMatName" class="text-slate-900 text-right">-</strong>
+                    <strong id="modalMatName" class="text-slate-900 text-right font-bold text-sm">-</strong>
                 </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Jumlah:</span>
-                    <strong id="modalMatQty" class="text-emerald-700">-</strong>
+                <div class="flex justify-between items-center py-1.5 px-3 bg-emerald-100/70 rounded-xl border border-emerald-200">
+                    <span class="text-emerald-900 font-semibold">Harga Penawaran:</span>
+                    <strong id="modalMatPrice" class="text-emerald-800 font-black text-sm">-</strong>
                 </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Penyedia:</span>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Jumlah Tersedia:</span>
+                    <strong id="modalMatQty" class="text-slate-800 font-semibold">-</strong>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Penyedia Material:</span>
                     <span id="modalMatOwner" class="font-medium text-slate-800">-</span>
                 </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Lokasi:</span>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Lokasi Penjemputan:</span>
                     <span id="modalMatLoc" class="font-medium text-slate-800">-</span>
                 </div>
             </div>
@@ -355,40 +360,69 @@
                 const catMeta = getCategoryMeta(mat.kategori);
                 const isAvailable = mat.status === 'available';
                 const formattedQty = Number(mat.jumlah) === parseInt(mat.jumlah) ? parseInt(mat.jumlah) : Number(mat.jumlah).toFixed(1);
+                const hargaFormatted = Number(mat.harga_per_satuan || 0).toLocaleString('id-ID');
+                const isPremium = mat.kelas_bahan === 'Premium';
 
                 return `
-                    <div id="mat-${mat.id}" class="bg-white rounded-2xl border ${isAvailable ? 'border-slate-200 hover:border-emerald-300' : 'border-slate-200 bg-slate-50/70 opacity-80'} overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 flex flex-col">
+                    <div id="mat-${mat.id}" class="bg-white rounded-2xl border ${isAvailable ? 'border-slate-200 hover:border-emerald-300' : 'border-slate-200 bg-slate-50/70 opacity-80'} overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 flex flex-col group">
                         <div class="p-5 flex-1">
-                            <div class="flex items-center justify-between gap-2 mb-3">
+                            <div class="flex items-start justify-between gap-2 mb-2">
                                 <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold ${catMeta.bg} ${catMeta.text} border ${catMeta.border}">
                                     <span class="mr-1">${catMeta.icon}</span>
                                     ${mat.kategori}
                                 </span>
-                                ${isAvailable ? `
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">
-                                        Tersedia
+                                <div class="flex items-center space-x-1 flex-shrink-0">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${isPremium ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-slate-100 text-slate-700 border border-slate-200'} uppercase">
+                                        ${mat.kelas_bahan || 'Standar'}
                                     </span>
-                                ` : mat.status === 'booked' ? `
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200 uppercase">
-                                        Dipesan
-                                    </span>
-                                ` : `
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-300 uppercase">
-                                        Selesai
-                                    </span>
-                                `}
+                                    ${isAvailable ? `
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">
+                                            Tersedia
+                                        </span>
+                                    ` : mat.status === 'booked' ? `
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 uppercase">
+                                            Dipesan
+                                        </span>
+                                    ` : `
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-300 uppercase">
+                                            Selesai
+                                        </span>
+                                    `}
+                                </div>
                             </div>
 
-                            <h3 class="text-lg font-bold text-slate-900 mb-1 leading-snug">
+                            <h3 class="text-base font-bold text-slate-900 group-hover:text-emerald-600 line-clamp-1 mb-1 transition-colors">
                                 ${mat.nama_bahan}
                             </h3>
 
-                            <div class="flex items-baseline space-x-1.5 my-2.5">
-                                <span class="text-3xl font-black text-emerald-600">${formattedQty}</span>
-                                <span class="text-sm font-bold text-slate-700 uppercase">${mat.satuan}</span>
+                            <div class="flex items-baseline justify-between gap-2 my-2">
+                                <div class="flex items-baseline space-x-1.5">
+                                    <span class="text-2xl font-black text-emerald-600">${formattedQty}</span>
+                                    <span class="text-sm font-bold text-slate-600 uppercase">${mat.satuan}</span>
+                                </div>
+                                <div class="text-right flex-shrink-0">
+                                    <span class="text-xs text-slate-400 block font-medium">Harga Penawaran:</span>
+                                    <span class="text-sm font-extrabold text-slate-800">Rp ${hargaFormatted}</span>
+                                    <span class="text-[10px] text-slate-500 font-semibold uppercase">/${mat.satuan_jual || 'kg'}</span>
+                                </div>
                             </div>
 
-                            <div class="mb-3">
+                            <!-- B2B Specs Badges -->
+                            <div class="flex flex-wrap gap-1.5 mb-2.5">
+                                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] font-semibold border border-slate-200" title="Ukuran Pecahan">
+                                    📏 ${mat.ukuran_pecahan || '0.5m - 3m'}
+                                </span>
+                                <span class="px-2 py-0.5 rounded bg-teal-50 text-teal-800 text-[10px] font-semibold border border-teal-200" title="Satuan Jual">
+                                    📦 Jual: ${mat.satuan_jual === 'borongan' ? 'Borongan' : 'Per Kg'}
+                                </span>
+                                ${mat.jenis_motif ? `
+                                    <span class="px-2 py-0.5 rounded bg-purple-50 text-purple-800 text-[10px] font-semibold border border-purple-200 truncate max-w-[170px]" title="Motif / Corak">
+                                        🎨 ${mat.jenis_motif}
+                                    </span>
+                                ` : ''}
+                            </div>
+
+                            <div class="mb-2">
                                 <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kondisi:</div>
                                 <div class="text-xs text-slate-700 font-medium bg-slate-50 p-2 rounded-lg border border-slate-100 mt-0.5">
                                     ${mat.kondisi}
@@ -396,7 +430,7 @@
                             </div>
 
                             ${mat.deskripsi ? `
-                                <p class="text-xs text-slate-500 mb-4 line-clamp-2">
+                                <p class="text-xs text-slate-500 mb-3 line-clamp-2">
                                     ${mat.deskripsi}
                                 </p>
                             ` : ''}
@@ -404,38 +438,41 @@
                             <div class="pt-3 border-t border-slate-100 space-y-2 text-xs text-slate-600">
                                 <div class="flex items-center justify-between">
                                     <span class="flex items-center">
-                                        <svg class="w-3.5 h-3.5 text-slate-400 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-3.5 h-3.5 text-slate-400 mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                         </svg>
                                         <strong class="text-slate-700">${mat.wilayah}</strong>
                                     </span>
-                                    <span class="text-[11px] text-slate-400">${mat.created_at.split(' ')[0]}</span>
+                                    <span class="text-[11px] text-slate-400">${mat.created_at ? mat.created_at.split(' ')[0] : ''}</span>
                                 </div>
                                 <div class="flex items-center justify-between bg-emerald-50/50 p-2 rounded-lg border border-emerald-100/60">
-                                    <div class="truncate">
+                                    <div class="truncate mr-2">
                                         <span class="block text-[10px] text-emerald-800 font-semibold uppercase">Penyedia Material:</span>
-                                        <span class="font-bold text-slate-800">${mat.nama_usaha}</span>
+                                        <span class="font-bold text-slate-800 truncate block">${mat.nama_usaha}</span>
                                     </div>
-                                    <a href="https://wa.me/${mat.kontak.replace(/[^0-9]/g, '')}" target="_blank" class="px-2 py-1 text-[11px] font-bold text-emerald-700 bg-white hover:bg-emerald-100 rounded-md border border-emerald-200 flex items-center shadow-xs">
-                                        WA
+                                    <a href="https://wa.me/${(mat.kontak || '').replace(/[^0-9]/g, '')}" target="_blank" class="px-2.5 py-1 text-[11px] font-bold text-emerald-700 bg-white hover:bg-emerald-100 rounded-md border border-emerald-200 flex items-center shadow-xs flex-shrink-0 transition">
+                                        Chat WA
                                     </a>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="p-4 bg-slate-50 border-t border-slate-100">
+                        <div class="px-5 py-3.5 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-[11px] text-slate-400">
+                                ${mat.created_at ? mat.created_at.split(' ')[0] : 'Aktif'}
+                            </span>
                             ${isAvailable ? `
-                                <button type="button" onclick="openClaimModal(${mat.id})" class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-semibold text-xs rounded-xl shadow-xs transition flex items-center justify-center">
-                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <button type="button" onclick="openClaimModal(${mat.id})" class="inline-flex items-center text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 px-3.5 py-1.5 rounded-lg shadow-xs transition">
+                                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
                                     Ajukan Pengambilan
                                 </button>
                             ` : `
-                                <button type="button" disabled class="w-full py-2.5 px-4 bg-slate-200 text-slate-400 font-medium text-xs rounded-xl cursor-not-allowed">
+                                <span class="inline-flex items-center text-xs font-semibold text-slate-400 bg-slate-200 px-3 py-1.5 rounded-lg cursor-not-allowed">
                                     Sudah Tidak Tersedia
-                                </button>
+                                </span>
                             `}
                         </div>
                     </div>
@@ -466,10 +503,13 @@
             const mat = materials.find(m => m.id === materialId);
             if (!mat) return;
 
+            const hargaFormatted = Number(mat.harga_per_satuan || 0).toLocaleString('id-ID');
+
             document.getElementById('modalMatId').value = mat.id;
             document.getElementById('modalMatName').textContent = mat.nama_bahan;
+            document.getElementById('modalMatPrice').textContent = `Rp ${hargaFormatted} / ${mat.satuan_jual || 'kg'}`;
             document.getElementById('modalMatQty').textContent = `${mat.jumlah} ${mat.satuan}`;
-            document.getElementById('modalMatOwner').textContent = mat.nama_usaha;
+            document.getElementById('modalMatOwner').textContent = `${mat.nama_usaha} (${mat.sektor || 'UMKM'})`;
             document.getElementById('modalMatLoc').textContent = mat.wilayah;
 
             populateReceiverDropdown();
@@ -535,12 +575,28 @@
         // Init page
         applyFilters();
 
+        // Check for URL ?detail= param
+        const urlParams = new URLSearchParams(window.location.search);
+        const detailId = parseInt(urlParams.get('detail'));
+        if (detailId) {
+            setTimeout(() => {
+                openClaimModal(detailId);
+                const el = document.getElementById(`mat-${detailId}`);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }, 250);
+        }
+
         // Mobile Menu Toggle
         const mobileBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const closeIcon = document.getElementById('close-icon');
+
         if (mobileBtn && mobileMenu) {
             mobileBtn.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
+                if (hamburgerIcon) hamburgerIcon.classList.toggle('hidden');
+                if (closeIcon) closeIcon.classList.toggle('hidden');
             });
         }
     </script>

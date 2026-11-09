@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Matching & Transaksi Sirkular - ReBahan</title>
+    <title>ReBahan: Inovasi Platform Digital untuk Kolaborasi Pemanfaatan Material Sisa dan Kebutuhan Bahan Baku UMKM - Smart Matching</title>
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -25,11 +25,11 @@
                                 <span class="text-2xl font-black tracking-tight text-slate-800">
                                     Re<span class="text-emerald-600">Bahan</span>
                                 </span>
-                                <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                    SIRKULAR UMKM
+                                <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 tracking-wide uppercase">
+                                    B2B SIRKULAR UMKM
                                 </span>
                             </div>
-                            <p class="text-[11px] text-slate-500 hidden sm:block">Pemanfaatan Material Sisa Jakarta</p>
+                            <p class="text-[11px] text-slate-500 hidden lg:block truncate max-w-xs xl:max-w-md">Inovasi Kolaborasi Material Sisa & Bahan Baku UMKM Jakarta</p>
                         </div>
                     </a>
                 </div>
@@ -121,17 +121,17 @@
                     </p>
                 </div>
                 
-                <div class="flex flex-wrap sm:flex-nowrap items-center gap-2">
-                    <div>
-                        <select id="match-kategori" onchange="runSmartMatching()" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-2.5 w-full md:w-auto">
+                    <div class="w-full sm:w-auto">
+                        <select id="match-kategori" onchange="runSmartMatching()" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
                             <option value="Kain/Tekstil">🧵 Kain/Tekstil</option>
                             <option value="Kertas/Karton">📦 Kertas/Karton</option>
                             <option value="Plastik">♻️ Plastik</option>
                             <option value="Kayu/Bambu">🪵 Kayu/Bambu</option>
                         </select>
                     </div>
-                    <div>
-                        <select id="match-wilayah" onchange="runSmartMatching()" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                    <div class="w-full sm:w-auto">
+                        <select id="match-wilayah" onchange="runSmartMatching()" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
                             <option value="Jakarta Selatan">Jakarta Selatan</option>
                             <option value="Jakarta Pusat">Jakarta Pusat</option>
                             <option value="Jakarta Barat">Jakarta Barat</option>
@@ -139,14 +139,14 @@
                             <option value="Jakarta Utara">Jakarta Utara</option>
                         </select>
                     </div>
-                    <button type="button" onclick="runSmartMatching()" class="text-xs font-bold px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition">
+                    <button type="button" onclick="runSmartMatching()" class="w-full sm:w-auto text-xs font-bold px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition shadow-xs">
                         Cocokkan
                     </button>
                 </div>
             </div>
 
             <!-- Rekomendasi Grid -->
-            <div id="matching-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div id="matching-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Rendered by JS -->
             </div>
         </section>
@@ -170,8 +170,8 @@
                 </div>
             </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse text-xs">
+            <div class="overflow-x-auto -mx-6 sm:mx-0 px-6 sm:px-0">
+                <table class="w-full text-left border-collapse text-xs min-w-[760px]">
                     <thead>
                         <tr class="bg-slate-50 text-slate-500 border-b border-slate-200 uppercase tracking-wider font-semibold">
                             <th class="py-3 px-4">ID & Tanggal</th>
@@ -234,48 +234,111 @@
 
             grid.innerHTML = scored.slice(0, 6).map(rm => {
                 const isSameRegion = rm.wilayah === wilayah;
+                const catMeta = getCategoryMeta(rm.kategori);
                 const formattedQty = Number(rm.jumlah) === parseInt(rm.jumlah) ? parseInt(rm.jumlah) : Number(rm.jumlah).toFixed(1);
+                const hargaFormatted = Number(rm.harga_per_satuan || 0).toLocaleString('id-ID');
+                const isPremium = rm.kelas_bahan === 'Premium';
 
                 return `
-                    <div class="bg-gradient-to-b from-white to-slate-50/70 rounded-2xl border ${rm.match_score >= 90 ? 'border-emerald-300 shadow-sm' : 'border-slate-200'} p-5 flex flex-col justify-between hover:shadow-md transition">
-                        <div>
-                            <div class="flex items-center justify-between mb-2">
-                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold ${rm.match_score >= 90 ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800'}">
-                                    ⚡ Skor Cocok ${rm.match_score}%
+                    <div class="bg-white rounded-2xl border ${rm.match_score >= 90 ? 'border-emerald-300 shadow-sm' : 'border-slate-200'} overflow-hidden shadow-xs hover:shadow-md hover:border-emerald-400 transition-all duration-200 flex flex-col group">
+                        <div class="p-5 flex-1">
+                            <!-- Category, Kelas Bahan, & Matching Badge -->
+                            <div class="flex items-start justify-between gap-2 mb-2">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold ${catMeta.bg} ${catMeta.text} border ${catMeta.border}">
+                                    <span class="mr-1">${catMeta.icon}</span>
+                                    ${rm.kategori}
                                 </span>
-                                ${isSameRegion ? `
-                                    <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                                        🌱 1 Wilayah (Hemat Emisi)
+                                <div class="flex items-center space-x-1 flex-shrink-0">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${isPremium ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-slate-100 text-slate-700 border border-slate-200'} uppercase">
+                                        ${rm.kelas_bahan || 'Standar'}
+                                    </span>
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold ${rm.match_score >= 90 ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-blue-100 text-blue-800 border border-blue-200'}">
+                                        ⚡ ${rm.match_score}%
+                                    </span>
+                                </div>
+                            </div>
+
+                            ${isSameRegion ? `
+                                <div class="mb-2">
+                                    <span class="inline-flex items-center text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                                        🌱 1 Wilayah (${rm.wilayah} - Hemat Emisi Transportasi)
+                                    </span>
+                                </div>
+                            ` : ''}
+
+                            <h3 class="text-base font-bold text-slate-900 group-hover:text-emerald-600 line-clamp-1 mb-1 transition-colors">
+                                ${rm.nama_bahan}
+                            </h3>
+
+                            <div class="flex items-baseline justify-between gap-2 my-2">
+                                <div class="flex items-baseline space-x-1.5">
+                                    <span class="text-2xl font-black text-emerald-600">${formattedQty}</span>
+                                    <span class="text-sm font-bold text-slate-600 uppercase">${rm.satuan}</span>
+                                </div>
+                                <div class="text-right flex-shrink-0">
+                                    <span class="text-xs text-slate-400 block font-medium">Harga Penawaran:</span>
+                                    <span class="text-sm font-extrabold text-slate-800">Rp ${hargaFormatted}</span>
+                                    <span class="text-[10px] text-slate-500 font-semibold uppercase">/${rm.satuan_jual || 'kg'}</span>
+                                </div>
+                            </div>
+
+                            <!-- B2B Specs Badges -->
+                            <div class="flex flex-wrap gap-1.5 mb-2.5">
+                                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] font-semibold border border-slate-200" title="Ukuran Pecahan">
+                                    📏 ${rm.ukuran_pecahan || '0.5m - 3m'}
+                                </span>
+                                <span class="px-2 py-0.5 rounded bg-teal-50 text-teal-800 text-[10px] font-semibold border border-teal-200" title="Satuan Jual">
+                                    📦 Jual: ${rm.satuan_jual === 'borongan' ? 'Borongan' : 'Per Kg'}
+                                </span>
+                                ${rm.jenis_motif ? `
+                                    <span class="px-2 py-0.5 rounded bg-purple-50 text-purple-800 text-[10px] font-semibold border border-purple-200 truncate max-w-[170px]" title="Motif / Corak">
+                                        🎨 ${rm.jenis_motif}
                                     </span>
                                 ` : ''}
                             </div>
 
-                            <h3 class="text-sm font-bold text-slate-900 line-clamp-1 mb-1">
-                                ${rm.nama_bahan}
-                            </h3>
-
-                            <div class="text-xs text-slate-500 mb-2">
-                                Kategori: <strong class="text-slate-700">${rm.kategori}</strong>
+                            <div class="mb-2">
+                                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kondisi:</div>
+                                <div class="text-xs text-slate-700 font-medium bg-slate-50 p-2 rounded-lg border border-slate-100 mt-0.5">
+                                    ${rm.kondisi}
+                                </div>
                             </div>
 
-                            <div class="flex items-baseline space-x-1 my-2">
-                                <span class="text-2xl font-black text-emerald-600">${formattedQty}</span>
-                                <span class="text-xs font-bold text-slate-600 uppercase">${rm.satuan}</span>
-                            </div>
+                            ${rm.deskripsi ? `
+                                <p class="text-xs text-slate-500 mb-3 line-clamp-2">
+                                    ${rm.deskripsi}
+                                </p>
+                            ` : ''}
 
-                            <div class="text-xs text-slate-600 space-y-1 pt-2 border-t border-slate-100">
-                                <p><strong>Penyedia:</strong> ${rm.nama_usaha}</p>
-                                <p><strong>Lokasi:</strong> ${rm.wilayah}</p>
-                                <p class="text-[11px] text-slate-500 italic line-clamp-2">"${rm.kondisi}"</p>
+                            <div class="pt-3 border-t border-slate-100 space-y-2 text-xs text-slate-600">
+                                <div class="flex items-center justify-between">
+                                    <span class="flex items-center">
+                                        <svg class="w-3.5 h-3.5 text-slate-400 mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                        <strong class="text-slate-700">${rm.wilayah}</strong>
+                                    </span>
+                                    <span class="text-[11px] text-slate-400">${rm.created_at ? rm.created_at.split(' ')[0] : 'Aktif'}</span>
+                                </div>
+                                <div class="flex items-center justify-between bg-emerald-50/50 p-2 rounded-lg border border-emerald-100/60">
+                                    <div class="truncate mr-2">
+                                        <span class="block text-[10px] text-emerald-800 font-semibold uppercase">Penyedia Material:</span>
+                                        <span class="font-bold text-slate-800 truncate block">${rm.nama_usaha}</span>
+                                    </div>
+                                    <a href="https://wa.me/${(rm.kontak || '').replace(/[^0-9]/g, '')}" target="_blank" class="px-2.5 py-1 text-[11px] font-bold text-emerald-700 bg-white hover:bg-emerald-100 rounded-md border border-emerald-200 flex items-center shadow-xs flex-shrink-0 transition">
+                                        Chat WA
+                                    </a>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                            <a href="https://wa.me/${rm.kontak.replace(/[^0-9]/g, '')}" target="_blank" class="text-xs font-bold text-emerald-600 hover:underline">
-                                Chat WA
+                        <div class="px-5 py-3.5 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">
+                            <a href="https://wa.me/${(rm.kontak || '').replace(/[^0-9]/g, '')}" target="_blank" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 transition">
+                                &larr; Kontak Langsung
                             </a>
-                            <a href="katalog.html?detail=${rm.id}#mat-${rm.id}" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-xs">
-                                Ambil Bahan
+                            <a href="katalog.html?detail=${rm.id}#mat-${rm.id}" class="inline-flex items-center text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 px-3.5 py-1.5 rounded-lg shadow-xs transition">
+                                Ajukan Pengambilan &rarr;
                             </a>
                         </div>
                     </div>
@@ -389,9 +452,13 @@
         // Mobile Menu Toggle
         const mobileBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
+        const hamburgerIcon = document.getElementById('hamburger-icon');
+        const closeIcon = document.getElementById('close-icon');
         if (mobileBtn && mobileMenu) {
             mobileBtn.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
+                if (hamburgerIcon) hamburgerIcon.classList.toggle('hidden');
+                if (closeIcon) closeIcon.classList.toggle('hidden');
             });
         }
     </script>

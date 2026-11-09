@@ -164,17 +164,17 @@ function getTrxStatusBadge($status) {
                 </div>
                 
                 <!-- Form Filter Smart Matching -->
-                <form method="GET" action="matching.php" class="flex flex-wrap sm:flex-nowrap items-center gap-2">
-                    <div>
-                        <select name="kategori" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                <form method="GET" action="matching.php" class="flex flex-col sm:flex-row sm:items-center gap-2.5 w-full md:w-auto">
+                    <div class="w-full sm:w-auto">
+                        <select name="kategori" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
                             <option value="Kain/Tekstil" <?= $matchKategori === 'Kain/Tekstil' ? 'selected' : '' ?>>🧵 Kain/Tekstil</option>
                             <option value="Kertas/Karton" <?= $matchKategori === 'Kertas/Karton' ? 'selected' : '' ?>>📦 Kertas/Karton</option>
                             <option value="Plastik" <?= $matchKategori === 'Plastik' ? 'selected' : '' ?>>♻️ Plastik</option>
                             <option value="Kayu/Bambu" <?= $matchKategori === 'Kayu/Bambu' ? 'selected' : '' ?>>🪵 Kayu/Bambu</option>
                         </select>
                     </div>
-                    <div>
-                        <select name="wilayah" class="text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
+                    <div class="w-full sm:w-auto">
+                        <select name="wilayah" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 bg-white">
                             <option value="Jakarta Selatan" <?= $matchWilayah === 'Jakarta Selatan' ? 'selected' : '' ?>>Jakarta Selatan</option>
                             <option value="Jakarta Pusat" <?= $matchWilayah === 'Jakarta Pusat' ? 'selected' : '' ?>>Jakarta Pusat</option>
                             <option value="Jakarta Barat" <?= $matchWilayah === 'Jakarta Barat' ? 'selected' : '' ?>>Jakarta Barat</option>
@@ -182,7 +182,7 @@ function getTrxStatusBadge($status) {
                             <option value="Jakarta Utara" <?= $matchWilayah === 'Jakarta Utara' ? 'selected' : '' ?>>Jakarta Utara</option>
                         </select>
                     </div>
-                    <button type="submit" class="text-xs font-bold px-3 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition">
+                    <button type="submit" class="w-full sm:w-auto text-xs font-bold px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl transition shadow-xs">
                         Cocokkan
                     </button>
                 </form>
@@ -197,55 +197,130 @@ function getTrxStatusBadge($status) {
                     </a>
                 </div>
             <?php else: ?>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <?php foreach ($recommendedMaterials as $rm): 
                         $score = (int) ($rm['match_score'] ?? 75);
                         $isSameRegion = ($rm['wilayah'] === $matchWilayah);
+                        $catMeta = getCategoryMeta($rm['kategori']);
+                        $isPremium = (($rm['kelas_bahan'] ?? 'Standar') === 'Premium');
+                        $formattedQty = (float)$rm['jumlah'] == (int)$rm['jumlah'] ? (int)$rm['jumlah'] : number_format($rm['jumlah'], 1);
+                        $hargaFormatted = number_format($rm['harga_per_satuan'] ?? 0, 0, ',', '.');
+                        $satuanJual = $rm['satuan_jual'] ?? 'kg';
+                        $ukuranPecahan = $rm['ukuran_pecahan'] ?? '0.5m - 3m';
+                        $kelasBahan = $rm['kelas_bahan'] ?? 'Standar';
+                        $jenisMotif = $rm['jenis_motif'] ?? '';
                     ?>
-                        <div class="bg-gradient-to-b from-white to-slate-50/70 rounded-2xl border <?= $score >= 90 ? 'border-emerald-300 shadow-sm' : 'border-slate-200' ?> p-5 flex flex-col justify-between hover:shadow-md transition">
-                            <div>
-                                <!-- Match Score Badge -->
-                                <div class="flex items-center justify-between mb-2">
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold <?= $score >= 90 ? 'bg-emerald-100 text-emerald-800' : 'bg-blue-100 text-blue-800' ?>">
-                                        ⚡ Skor Cocok <?= $score ?>%
+                        <div class="bg-white rounded-2xl border <?= $score >= 90 ? 'border-emerald-300 shadow-sm' : 'border-slate-200' ?> overflow-hidden shadow-xs hover:shadow-md hover:border-emerald-400 transition-all duration-200 flex flex-col group">
+                            <div class="p-5 flex-1">
+                                <!-- Card Header & Badge -->
+                                <div class="flex items-start justify-between gap-2 mb-2">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold <?= $catMeta['bg'] ?> <?= $catMeta['text'] ?> border <?= $catMeta['border'] ?>">
+                                        <span class="mr-1"><?= $catMeta['icon'] ?></span>
+                                        <?= htmlspecialchars($rm['kategori']) ?>
                                     </span>
-                                    <?php if ($isSameRegion): ?>
-                                        <span class="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                                            🌱 1 Wilayah (Hemat Emisi)
+                                    <div class="flex items-center space-x-1 flex-shrink-0">
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold <?= $isPremium ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-slate-100 text-slate-700 border border-slate-200' ?> uppercase">
+                                            <?= htmlspecialchars($kelasBahan) ?>
+                                        </span>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold <?= $score >= 90 ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-blue-100 text-blue-800 border border-blue-200' ?>">
+                                            ⚡ <?= $score ?>%
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <?php if ($isSameRegion): ?>
+                                    <div class="mb-2">
+                                        <span class="inline-flex items-center text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                                            🌱 1 Wilayah (<?= htmlspecialchars($rm['wilayah']) ?> - Hemat Emisi Transportasi)
+                                        </span>
+                                    </div>
+                                <?php endif; ?>
+
+                                <!-- Nama Bahan -->
+                                <h3 class="text-base font-bold text-slate-900 group-hover:text-emerald-600 line-clamp-1 mb-1 transition-colors">
+                                    <?= htmlspecialchars($rm['nama_bahan']) ?>
+                                </h3>
+
+                                <!-- Kuantitas & Harga Penawaran -->
+                                <div class="flex items-baseline justify-between gap-2 my-2">
+                                    <div class="flex items-baseline space-x-1.5">
+                                        <span class="text-2xl font-black text-emerald-600">
+                                            <?= $formattedQty ?>
+                                        </span>
+                                        <span class="text-sm font-bold text-slate-600 uppercase">
+                                            <?= htmlspecialchars($rm['satuan']) ?>
+                                        </span>
+                                    </div>
+                                    <div class="text-right flex-shrink-0">
+                                        <span class="text-xs text-slate-400 block font-medium">Harga Penawaran:</span>
+                                        <span class="text-sm font-extrabold text-slate-800">Rp <?= $hargaFormatted ?></span>
+                                        <span class="text-[10px] text-slate-500 font-semibold uppercase">/<?= htmlspecialchars($satuanJual) ?></span>
+                                    </div>
+                                </div>
+
+                                <!-- B2B Specs Badges -->
+                                <div class="flex flex-wrap gap-1.5 mb-2.5">
+                                    <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] font-semibold border border-slate-200" title="Ukuran Pecahan">
+                                        📏 <?= htmlspecialchars($ukuranPecahan) ?>
+                                    </span>
+                                    <span class="px-2 py-0.5 rounded bg-teal-50 text-teal-800 text-[10px] font-semibold border border-teal-200" title="Satuan Jual">
+                                        📦 Jual: <?= $satuanJual === 'borongan' ? 'Borongan' : 'Per Kg' ?>
+                                    </span>
+                                    <?php if (!empty($jenisMotif)): ?>
+                                        <span class="px-2 py-0.5 rounded bg-purple-50 text-purple-800 text-[10px] font-semibold border border-purple-200 truncate max-w-[170px]" title="Motif / Corak">
+                                            🎨 <?= htmlspecialchars($jenisMotif) ?>
                                         </span>
                                     <?php endif; ?>
                                 </div>
 
-                                <h3 class="text-sm font-bold text-slate-900 line-clamp-1 mb-1">
-                                    <?= htmlspecialchars($rm['nama_bahan']) ?>
-                                </h3>
-
-                                <div class="text-xs text-slate-500 mb-2">
-                                    Kategori: <strong class="text-slate-700"><?= htmlspecialchars($rm['kategori']) ?></strong>
+                                <!-- Kondisi Bahan -->
+                                <div class="mb-2">
+                                    <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kondisi:</div>
+                                    <div class="text-xs text-slate-700 font-medium bg-slate-50 p-2 rounded-lg border border-slate-100 mt-0.5">
+                                        <?= htmlspecialchars($rm['kondisi']) ?>
+                                    </div>
                                 </div>
 
-                                <div class="flex items-baseline space-x-1 my-2">
-                                    <span class="text-2xl font-black text-emerald-600">
-                                        <?= (float)$rm['jumlah'] == (int)$rm['jumlah'] ? (int)$rm['jumlah'] : number_format($rm['jumlah'], 1) ?>
-                                    </span>
-                                    <span class="text-xs font-bold text-slate-600 uppercase">
-                                        <?= htmlspecialchars($rm['satuan']) ?>
-                                    </span>
-                                </div>
+                                <!-- Deskripsi Singkat -->
+                                <?php if (!empty($rm['deskripsi'])): ?>
+                                    <p class="text-xs text-slate-500 mb-3 line-clamp-2">
+                                        <?= htmlspecialchars($rm['deskripsi']) ?>
+                                    </p>
+                                <?php endif; ?>
 
-                                <div class="text-xs text-slate-600 space-y-1 pt-2 border-t border-slate-100">
-                                    <p><strong>Penyedia:</strong> <?= htmlspecialchars($rm['nama_usaha']) ?></p>
-                                    <p><strong>Lokasi:</strong> <?= htmlspecialchars($rm['wilayah']) ?></p>
-                                    <p class="text-[11px] text-slate-500 italic line-clamp-2">"<?= htmlspecialchars($rm['kondisi']) ?>"</p>
+                                <!-- Info Penyedia & Lokasi -->
+                                <div class="pt-3 border-t border-slate-100 space-y-2 text-xs text-slate-600">
+                                    <div class="flex items-center justify-between">
+                                        <span class="flex items-center">
+                                            <svg class="w-3.5 h-3.5 text-slate-400 mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            </svg>
+                                            <strong class="text-slate-700"><?= htmlspecialchars($rm['wilayah']) ?></strong>
+                                        </span>
+                                        <span class="text-[11px] text-slate-400">
+                                            <?= date('d/m/Y', strtotime($rm['created_at'])) ?>
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="flex items-center justify-between bg-emerald-50/50 p-2 rounded-lg border border-emerald-100/60">
+                                        <div class="truncate mr-2">
+                                            <span class="block text-[10px] text-emerald-800 font-semibold uppercase">Penyedia Material:</span>
+                                            <span class="font-bold text-slate-800 truncate block"><?= htmlspecialchars($rm['nama_usaha']) ?></span>
+                                        </div>
+                                        <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $rm['kontak']) ?>" target="_blank" class="px-2.5 py-1 text-[11px] font-bold text-emerald-700 bg-white hover:bg-emerald-100 rounded-md border border-emerald-200 flex items-center shadow-xs flex-shrink-0 transition">
+                                            Chat WA
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
-                                <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $rm['kontak']) ?>" target="_blank" class="text-xs font-bold text-emerald-600 hover:underline">
-                                    Chat WA
+                            <div class="px-5 py-3.5 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">
+                                <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $rm['kontak']) ?>" target="_blank" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 transition">
+                                    &larr; Kontak Langsung
                                 </a>
-                                <a href="katalog.php?detail=<?= $rm['id'] ?>#mat-<?= $rm['id'] ?>" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-xs">
-                                    Ambil Bahan
+                                <a href="katalog.php?detail=<?= $rm['id'] ?>#mat-<?= $rm['id'] ?>" class="inline-flex items-center text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 px-3.5 py-1.5 rounded-lg shadow-xs transition">
+                                    Ajukan Pengambilan &rarr;
                                 </a>
                             </div>
                         </div>
@@ -282,8 +357,8 @@ function getTrxStatusBadge($status) {
                 </div>
             <?php else: ?>
                 <!-- Responsive Table Wrapper -->
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-xs">
+                <div class="overflow-x-auto -mx-6 sm:mx-0 px-6 sm:px-0">
+                    <table class="w-full text-left border-collapse text-xs min-w-[760px]">
                         <thead>
                             <tr class="bg-slate-50 text-slate-500 border-b border-slate-200 uppercase tracking-wider font-semibold">
                                 <th class="py-3 px-4">ID & Tanggal</th>

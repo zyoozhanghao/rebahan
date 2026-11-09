@@ -45,11 +45,11 @@ $navLinks = [
                             <span class="text-2xl font-black tracking-tight text-slate-800">
                                 Re<span class="text-emerald-600">Bahan</span>
                             </span>
-                            <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide bg-emerald-50 text-emerald-700 border border-emerald-200">
+                            <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800 tracking-wide uppercase">
                                 B2B SIRKULAR UMKM
                             </span>
                         </div>
-                        <p class="text-[11px] text-slate-500 hidden sm:block">Inovasi Platform Digital untuk Kolaborasi Pemanfaatan Material Sisa dan Kebutuhan Bahan Baku UMKM</p>
+                        <p class="text-[11px] text-slate-500 hidden lg:block truncate max-w-xs xl:max-w-md">Inovasi Kolaborasi Material Sisa & Bahan Baku UMKM Jakarta</p>
                     </div>
                 </a>
             </div>

@@ -183,7 +183,7 @@ function getCategoryMeta($kategori) {
         <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs mb-8">
             <form method="GET" action="katalog.php" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4">
                 <!-- Search Keyword -->
-                <div class="lg:col-span-5">
+                <div class="sm:col-span-2 lg:col-span-5">
                     <label for="q" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Cari Bahan / UMKM</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
@@ -198,7 +198,7 @@ function getCategoryMeta($kategori) {
                 </div>
 
                 <!-- Filter Kategori -->
-                <div class="lg:col-span-3">
+                <div class="sm:col-span-1 lg:col-span-3">
                     <label for="kategori" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Kategori Material</label>
                     <select id="kategori" name="kategori" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white">
                         <option value="">Semua Kategori</option>
@@ -210,7 +210,7 @@ function getCategoryMeta($kategori) {
                 </div>
 
                 <!-- Filter Wilayah Jakarta -->
-                <div class="lg:col-span-2">
+                <div class="sm:col-span-1 lg:col-span-2">
                     <label for="wilayah" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">Wilayah Jakarta</label>
                     <select id="wilayah" name="wilayah" class="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white">
                         <option value="">Semua Wilayah</option>
@@ -223,7 +223,7 @@ function getCategoryMeta($kategori) {
                 </div>
 
                 <!-- Submit Filter Buttons -->
-                <div class="lg:col-span-2 flex items-end space-x-2">
+                <div class="sm:col-span-2 lg:col-span-2 flex items-end space-x-2">
                     <button type="submit" class="flex-1 py-2 px-3 bg-slate-800 hover:bg-slate-900 text-white font-semibold text-sm rounded-xl transition shadow-xs">
                         Terapkan
                     </button>
@@ -278,49 +278,83 @@ function getCategoryMeta($kategori) {
                 <?php foreach ($materials as $mat): 
                     $catMeta = getCategoryMeta($mat['kategori']);
                     $isAvailable = ($mat['status'] === 'available');
+                    $isPremium = (($mat['kelas_bahan'] ?? 'Standar') === 'Premium');
+                    $formattedQty = (float)$mat['jumlah'] == (int)$mat['jumlah'] ? (int)$mat['jumlah'] : number_format($mat['jumlah'], 1);
+                    $hargaFormatted = number_format($mat['harga_per_satuan'] ?? 0, 0, ',', '.');
+                    $satuanJual = $mat['satuan_jual'] ?? 'kg';
+                    $ukuranPecahan = $mat['ukuran_pecahan'] ?? '0.5m - 3m';
+                    $kelasBahan = $mat['kelas_bahan'] ?? 'Standar';
+                    $jenisMotif = $mat['jenis_motif'] ?? '';
                 ?>
-                    <div id="mat-<?= $mat['id'] ?>" class="bg-white rounded-2xl border <?= $isAvailable ? 'border-slate-200 hover:border-emerald-300' : 'border-slate-200 bg-slate-50/70 opacity-80' ?> overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 flex flex-col">
+                    <div id="mat-<?= $mat['id'] ?>" class="bg-white rounded-2xl border <?= $isAvailable ? 'border-slate-200 hover:border-emerald-300' : 'border-slate-200 bg-slate-50/70 opacity-80' ?> overflow-hidden shadow-xs hover:shadow-md transition-all duration-200 flex flex-col group">
                         
                         <!-- Card Header & Badge -->
                         <div class="p-5 flex-1">
-                            <div class="flex items-center justify-between gap-2 mb-3">
+                            <div class="flex items-start justify-between gap-2 mb-2">
                                 <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold <?= $catMeta['bg'] ?> <?= $catMeta['text'] ?> border <?= $catMeta['border'] ?>">
                                     <span class="mr-1"><?= $catMeta['icon'] ?></span>
                                     <?= htmlspecialchars($mat['kategori']) ?>
                                 </span>
 
-                                <?php if ($isAvailable): ?>
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">
-                                        Tersedia
+                                <div class="flex items-center space-x-1 flex-shrink-0">
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold <?= $isPremium ? 'bg-amber-100 text-amber-800 border border-amber-300' : 'bg-slate-100 text-slate-700 border border-slate-200' ?> uppercase">
+                                        <?= htmlspecialchars($kelasBahan) ?>
                                     </span>
-                                <?php elseif ($mat['status'] === 'booked'): ?>
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200 uppercase">
-                                        Dipesan
+                                    <?php if ($isAvailable): ?>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 uppercase">
+                                            Tersedia
+                                        </span>
+                                    <?php elseif ($mat['status'] === 'booked'): ?>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 uppercase">
+                                            Dipesan
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-slate-100 text-slate-600 border border-slate-300 uppercase">
+                                            Selesai
+                                        </span>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+
+                            <!-- Nama Bahan -->
+                            <h3 class="text-base font-bold text-slate-900 group-hover:text-emerald-600 line-clamp-1 mb-1 transition-colors">
+                                <?= htmlspecialchars($mat['nama_bahan']) ?>
+                            </h3>
+
+                            <!-- Kuantitas & Harga Penawaran -->
+                            <div class="flex items-baseline justify-between gap-2 my-2">
+                                <div class="flex items-baseline space-x-1.5">
+                                    <span class="text-2xl font-black text-emerald-600">
+                                        <?= $formattedQty ?>
                                     </span>
-                                <?php else: ?>
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 text-slate-600 border border-slate-300 uppercase">
-                                        Selesai
+                                    <span class="text-sm font-bold text-slate-600 uppercase">
+                                        <?= htmlspecialchars($mat['satuan']) ?>
+                                    </span>
+                                </div>
+                                <div class="text-right flex-shrink-0">
+                                    <span class="text-xs text-slate-400 block font-medium">Harga Penawaran:</span>
+                                    <span class="text-sm font-extrabold text-slate-800">Rp <?= $hargaFormatted ?></span>
+                                    <span class="text-[10px] text-slate-500 font-semibold uppercase">/<?= htmlspecialchars($satuanJual) ?></span>
+                                </div>
+                            </div>
+
+                            <!-- B2B Specs Badges -->
+                            <div class="flex flex-wrap gap-1.5 mb-2.5">
+                                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] font-semibold border border-slate-200" title="Ukuran Pecahan">
+                                    📏 <?= htmlspecialchars($ukuranPecahan) ?>
+                                </span>
+                                <span class="px-2 py-0.5 rounded bg-teal-50 text-teal-800 text-[10px] font-semibold border border-teal-200" title="Satuan Jual">
+                                    📦 Jual: <?= $satuanJual === 'borongan' ? 'Borongan' : 'Per Kg' ?>
+                                </span>
+                                <?php if (!empty($jenisMotif)): ?>
+                                    <span class="px-2 py-0.5 rounded bg-purple-50 text-purple-800 text-[10px] font-semibold border border-purple-200 truncate max-w-[170px]" title="Motif / Corak">
+                                        🎨 <?= htmlspecialchars($jenisMotif) ?>
                                     </span>
                                 <?php endif; ?>
                             </div>
 
-                            <!-- Nama Bahan -->
-                            <h3 class="text-lg font-bold text-slate-900 mb-1 leading-snug">
-                                <?= htmlspecialchars($mat['nama_bahan']) ?>
-                            </h3>
-
-                            <!-- Kuantitas & Satuan -->
-                            <div class="flex items-baseline space-x-1.5 my-2.5">
-                                <span class="text-3xl font-black text-emerald-600">
-                                    <?= (float)$mat['jumlah'] == (int)$mat['jumlah'] ? (int)$mat['jumlah'] : number_format($mat['jumlah'], 1) ?>
-                                </span>
-                                <span class="text-sm font-bold text-slate-700 uppercase">
-                                    <?= htmlspecialchars($mat['satuan']) ?>
-                                </span>
-                            </div>
-
                             <!-- Kondisi Bahan -->
-                            <div class="mb-3">
+                            <div class="mb-2">
                                 <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Kondisi:</div>
                                 <div class="text-xs text-slate-700 font-medium bg-slate-50 p-2 rounded-lg border border-slate-100 mt-0.5">
                                     <?= htmlspecialchars($mat['kondisi']) ?>
@@ -329,7 +363,7 @@ function getCategoryMeta($kategori) {
 
                             <!-- Deskripsi Singkat -->
                             <?php if (!empty($mat['deskripsi'])): ?>
-                                <p class="text-xs text-slate-500 mb-4 line-clamp-2">
+                                <p class="text-xs text-slate-500 mb-3 line-clamp-2">
                                     <?= htmlspecialchars($mat['deskripsi']) ?>
                                 </p>
                             <?php endif; ?>
@@ -338,7 +372,7 @@ function getCategoryMeta($kategori) {
                             <div class="pt-3 border-t border-slate-100 space-y-2 text-xs text-slate-600">
                                 <div class="flex items-center justify-between">
                                     <span class="flex items-center">
-                                        <svg class="w-3.5 h-3.5 text-slate-400 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-3.5 h-3.5 text-slate-400 mr-1.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                         </svg>
@@ -350,32 +384,35 @@ function getCategoryMeta($kategori) {
                                 </div>
                                 
                                 <div class="flex items-center justify-between bg-emerald-50/50 p-2 rounded-lg border border-emerald-100/60">
-                                    <div class="truncate">
+                                    <div class="truncate mr-2">
                                         <span class="block text-[10px] text-emerald-800 font-semibold uppercase">Penyedia Material:</span>
-                                        <span class="font-bold text-slate-800"><?= htmlspecialchars($mat['nama_usaha']) ?></span>
+                                        <span class="font-bold text-slate-800 truncate block"><?= htmlspecialchars($mat['nama_usaha']) ?></span>
                                     </div>
-                                    <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $mat['kontak']) ?>" target="_blank" class="px-2 py-1 text-[11px] font-bold text-emerald-700 bg-white hover:bg-emerald-100 rounded-md border border-emerald-200 flex items-center shadow-xs">
-                                        WA
+                                    <a href="https://wa.me/<?= preg_replace('/[^0-9]/', '', $mat['kontak']) ?>" target="_blank" class="px-2.5 py-1 text-[11px] font-bold text-emerald-700 bg-white hover:bg-emerald-100 rounded-md border border-emerald-200 flex items-center shadow-xs flex-shrink-0 transition">
+                                        Chat WA
                                     </a>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Card Action Button -->
-                        <div class="p-4 bg-slate-50 border-t border-slate-100">
+                        <div class="px-5 py-3.5 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between">
+                            <span class="text-[11px] text-slate-400">
+                                <?= date('d M Y', strtotime($mat['created_at'])) ?>
+                            </span>
                             <?php if ($isAvailable): ?>
                                 <button type="button" 
-                                        onclick="openClaimModal(<?= $mat['id'] ?>, '<?= addslashes(htmlspecialchars($mat['nama_bahan'])) ?>', '<?= (float)$mat['jumlah'] ?> <?= htmlspecialchars($mat['satuan']) ?>', '<?= addslashes(htmlspecialchars($mat['nama_usaha'])) ?>', '<?= htmlspecialchars($mat['wilayah']) ?>')"
-                                        class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-semibold text-xs rounded-xl shadow-xs transition flex items-center justify-center">
-                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        onclick="openClaimModal(<?= $mat['id'] ?>, '<?= addslashes(htmlspecialchars($mat['nama_bahan'])) ?>', '<?= $formattedQty ?> <?= htmlspecialchars($mat['satuan']) ?>', '<?= addslashes(htmlspecialchars($mat['nama_usaha'])) ?>', '<?= htmlspecialchars($mat['wilayah']) ?>', '<?= $hargaFormatted ?>', '<?= addslashes(htmlspecialchars($satuanJual)) ?>')"
+                                        class="inline-flex items-center text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 px-3.5 py-1.5 rounded-lg shadow-xs transition">
+                                    <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
                                     Ajukan Pengambilan
                                 </button>
                             <?php else: ?>
-                                <button type="button" disabled class="w-full py-2.5 px-4 bg-slate-200 text-slate-400 font-medium text-xs rounded-xl cursor-not-allowed">
+                                <span class="inline-flex items-center text-xs font-semibold text-slate-400 bg-slate-200 px-3 py-1.5 rounded-lg cursor-not-allowed">
                                     Sudah Tidak Tersedia
-                                </button>
+                                </span>
                             <?php endif; ?>
                         </div>
 
@@ -411,21 +448,25 @@ function getCategoryMeta($kategori) {
             </div>
 
             <!-- Material Summary Box -->
-            <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-4 mb-5 text-xs text-slate-700 space-y-1.5">
-                <div class="flex justify-between">
+            <div class="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-4 mb-5 text-xs text-slate-700 space-y-2">
+                <div class="flex justify-between items-center">
                     <span class="text-slate-500">Material:</span>
-                    <strong id="modalMatName" class="text-slate-900 text-right">-</strong>
+                    <strong id="modalMatName" class="text-slate-900 text-right font-bold text-sm">-</strong>
                 </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Jumlah:</span>
-                    <strong id="modalMatQty" class="text-emerald-700">-</strong>
+                <div class="flex justify-between items-center py-1.5 px-3 bg-emerald-100/70 rounded-xl border border-emerald-200">
+                    <span class="text-emerald-900 font-semibold">Harga Penawaran:</span>
+                    <strong id="modalMatPrice" class="text-emerald-800 font-black text-sm">-</strong>
                 </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Penyedia:</span>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Jumlah Tersedia:</span>
+                    <strong id="modalMatQty" class="text-slate-800 font-semibold">-</strong>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Penyedia Material:</span>
                     <span id="modalMatOwner" class="font-medium text-slate-800">-</span>
                 </div>
-                <div class="flex justify-between">
-                    <span class="text-slate-500">Lokasi:</span>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Lokasi Penjemputan:</span>
                     <span id="modalMatLoc" class="font-medium text-slate-800">-</span>
                 </div>
             </div>
@@ -493,9 +534,10 @@ function getCategoryMeta($kategori) {
     </div>
 
     <script>
-        function openClaimModal(id, name, qty, owner, loc) {
+        function openClaimModal(id, name, qty, owner, loc, price, satuanJual) {
             document.getElementById('modalMatId').value = id;
             document.getElementById('modalMatName').textContent = name;
+            document.getElementById('modalMatPrice').textContent = price ? `Rp ${price} / ${satuanJual || 'kg'}` : '-';
             document.getElementById('modalMatQty').textContent = qty;
             document.getElementById('modalMatOwner').textContent = owner;
             document.getElementById('modalMatLoc').textContent = loc;
@@ -516,6 +558,22 @@ function getCategoryMeta($kategori) {
                 el.classList.add('hidden');
             }
         }
+
+        // Auto trigger modal if URL has ?detail=
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const detailId = urlParams.get('detail');
+            if (detailId) {
+                const targetCard = document.getElementById('mat-' + detailId);
+                if (targetCard) {
+                    targetCard.scrollIntoView({ behavior: 'smooth' });
+                    const claimBtn = targetCard.querySelector('button[onclick^="openClaimModal"]');
+                    if (claimBtn) {
+                        setTimeout(() => claimBtn.click(), 250);
+                    }
+                }
+            }
+        });
     </script>
 
     <!-- Footer -->
