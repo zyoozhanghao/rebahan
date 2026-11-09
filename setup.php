@@ -254,11 +254,6 @@ function runDatabaseMigrationAndSeeding(PDO $pdo): array {
         }
         $logs[] = "Seeding data Material Sisa berhasil (" . count($materialsData) . " material ditambahkan).";
     }
-        foreach ($materialsData as $m) {
-            $insertMat->execute($m);
-        }
-        $logs[] = "Seeding data Material Sisa berhasil (" . count($materialsData) . " material ditambahkan).";
-    }
 
     // 6. Seeding Data Dummy Transaksi (Aktif & Selesai)
     $stmtTrxCount = $pdo->query("SELECT COUNT(*) FROM `transactions`");

@@ -28,7 +28,7 @@ $navLinks = [
         <div class="flex items-center justify-between h-20">
             <!-- Brand Logo & Tagline -->
             <div class="flex items-center space-x-3">
-                <a href="index.php" class="flex items-center space-x-3 group flex-shrink-0">
+                <a href="index.php" class="flex items-center space-x-3 group whitespace-nowrap flex-shrink-0">
                     <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition-transform duration-200 flex-shrink-0">
                         <!-- Recycle / Circular Economy Leaf SVG -->
                         <svg class="w-6 h-6 animate-[spin_10s_linear_infinite]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,7 +97,7 @@ $navLinks = [
             $isActive = ($currentPage === $nav['href']);
         ?>
             <a href="<?= $nav['href'] ?>" 
-               class="flex items-center px-3 py-2.5 rounded-xl text-base font-medium <?= $isActive 
+               class="flex items-center px-3 py-2.5 rounded-xl text-base font-medium whitespace-nowrap flex-shrink-0 <?= $isActive
                     ? 'bg-emerald-50 text-emerald-700 font-semibold' 
                     : 'text-slate-600 hover:text-emerald-600 hover:bg-slate-50' ?>">
                 <?= $nav['icon'] ?>
@@ -106,7 +106,7 @@ $navLinks = [
         <?php endforeach; ?>
         <div class="pt-2 border-t border-slate-100">
             <a href="penawaran.php" 
-               class="w-full flex items-center justify-center px-4 py-2.5 rounded-xl text-base font-semibold text-white bg-emerald-600 hover:bg-emerald-700">
+               class="w-full flex items-center justify-center px-4 py-2.5 rounded-xl text-base font-semibold text-white bg-emerald-600 hover:bg-emerald-700 whitespace-nowrap flex-shrink-0">
                 <svg class="w-5 h-5 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
